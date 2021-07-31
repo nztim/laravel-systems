@@ -2,7 +2,7 @@
 
 Package combining a number of existing projects for easy installation and maintenance.
 
-Including:
+Includes:
 
 - **nztim/markdown:** Process markdown via function and Blade directives. 
 
@@ -29,14 +29,27 @@ Add to require list:
 
 ### Configuration summary
 
-##### Service Providers
+##### Service providers
 
 ```php
+NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
+```
+
+##### Configuration files
+
+```php
+php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
+```
+##### .env values
+
+```php
+# LOGGER
+LOGGER_EMAIL_SENDER=app@example.org
+LOGGER_EMAIL_RECIPIENT=dev@example.org
 ```
 
 ##### Readme files 
 
-- [nztim/markdown](/src/Markdown/readme.md) 
-
-
+- [nztim/logger2](/src/Logger/readme.md) 
+- [nztim/markdown](/src/Markdown/readme.md)
