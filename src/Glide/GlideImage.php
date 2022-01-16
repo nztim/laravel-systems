@@ -53,7 +53,7 @@ class GlideImage
     public function url($params = null): string
     {
         if (!is_array($params)) {
-            $elements = explode('.', $params);
+            $elements = explode('.', strval($params));
             $params = [
                 'w'   => $elements[0],
                 'h'   => $elements[1] ?? 'auto',
