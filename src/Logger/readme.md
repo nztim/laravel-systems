@@ -39,6 +39,7 @@ The Laravel mail system must be configured for emails to function.
 
 ### Changelog
 
+* Included as-is in nztim/laravel-systems
 * v3.0: Switch to daily by default, config option is now 'single'.
 * v2.0: Remove facade. Requires monolog 2.0+ (Laravel 6.0)
 * v1.0: Complete rewrite using monolog handlers, only basic functionality retained. RequestInfo method removed. Do not upgrade without reviewing and updating all use of this package.
