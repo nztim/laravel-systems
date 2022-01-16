@@ -73,5 +73,6 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 
 ##### Readme files
 
+- [nztim/glide](/src/Glide/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
