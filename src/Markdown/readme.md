@@ -4,11 +4,6 @@ Process markdown via function and Blade directives.
 
 YouTube embed functionality a modified version of code from zoonru/commonmark-ext-youtube-iframe.
 
-### Installation
-
-* `composer require nztim/markdown`
-* Register service provider `NZTim\Markdown\MarkdownServiceProvider::class`
-
 ### Usage
 
 * `markdown($string)` converts markdown to HTML

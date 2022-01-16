@@ -6,9 +6,9 @@ use ParsedownExtra;
 
 class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
 {
-    protected function inlineLink($Excerpt)
+    protected function inlineLink($excerpt)
     {
-        $inline = parent::inlineLink($Excerpt);
+        $inline = parent::inlineLink($excerpt);
         return $this->handleLink($inline);
     }
 

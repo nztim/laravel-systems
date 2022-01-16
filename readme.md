@@ -22,10 +22,7 @@ Add to composer.json repositories array:
     "url": "https://github.com/nztim/laravel-systems"
 }
 ```
-Add to require list:
-```json
-"nztim/laravel-systems": "^1.0"
-```
+Then `composer require nztim/laravel-systems`
 
 ### Configuration summary
 
@@ -41,6 +38,7 @@ NZTim\Markdown\MarkdownServiceProvider::class,
 ```php
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
 ```
+
 ##### .env values
 
 ```php

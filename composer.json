@@ -1,6 +1,6 @@
 {
     "name": "nztim/laravel-systems",
-    "description": "Combined Laravel packags",
+    "description": "Combined Laravel packages and helpers",
     "license": "MIT",
     "require": {
         "php": ">=8.0",
@@ -19,11 +19,5 @@
         "files": [
             "src/helpers.php"
         ]
-    },
-    "authors": [
-        {
-            "name": "Tim",
-            "email": "tim@nztim.com"
-        }
-    ]
+    }
 }
