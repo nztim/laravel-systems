@@ -4,7 +4,8 @@ Package combining a number of existing projects for easy installation and mainte
 
 Includes:
 
-- **nztim/markdown:** Process markdown via function and Blade directives. 
+- **nztim/logger2:** Complements standard Laravel logging.
+- **nztim/markdown:** Process markdown via function and Blade directives.
 
 ### Compatiblity
 
@@ -16,12 +17,14 @@ Includes:
 ### Installation
 
 Add to composer.json repositories array:
+
 ```json
 {
     "type": "vcs",
     "url": "https://github.com/nztim/laravel-systems"
 }
 ```
+
 Then `composer require nztim/laravel-systems`
 
 ### Configuration summary
@@ -47,7 +50,7 @@ LOGGER_EMAIL_SENDER=app@example.org
 LOGGER_EMAIL_RECIPIENT=dev@example.org
 ```
 
-##### Readme files 
+##### Readme files
 
-- [nztim/logger2](/src/Logger/readme.md) 
+- [nztim/logger2](/src/Logger/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
