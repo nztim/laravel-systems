@@ -5,6 +5,7 @@ Package combining a number of existing projects for easy installation and mainte
 Includes:
 
 - **nztim/commandbus:** Simple command bus.
+- **nztim/input:** Input processing.
 - **nztim/logger2:** Complements standard Laravel logging.
 - **nztim/mailer2:** Email sending.
 - **nztim/glide:** Glide image helper.
@@ -90,6 +91,7 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 
 - [nztim/commandbus](/src/CommandBus/readme.md)
 - [nztim/glide](/src/Glide/readme.md)
+- [nztim/input](/src/Input/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
