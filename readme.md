@@ -38,6 +38,7 @@ Then `composer require nztim/laravel-systems`
 
 ```php
 NZTim\CommandBus\Laravel\CommandBusServiceProvider::class,
+NZTim\Helpers\HelpersServiceProvider::class,
 NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
@@ -91,6 +92,7 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 
 - [nztim/commandbus](/src/CommandBus/readme.md)
 - [nztim/glide](/src/Glide/readme.md)
+- [nztim/helpers](/src/Helpers/readme.md)
 - [nztim/input](/src/Input/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)

@@ -25,6 +25,7 @@
             "NZTim\\Tests\\": "tests/"
         },
         "files": [
+            "src/Helpers/helpers.php",
             "src/helpers.php"
         ]
     }
