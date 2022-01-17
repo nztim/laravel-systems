@@ -6,6 +6,7 @@ Includes:
 
 - **nztim/commandbus:** Simple command bus.
 - **nztim/logger2:** Complements standard Laravel logging.
+- **nztim/mailer2:** Email sending.
 - **nztim/glide:** Glide image helper.
 - **nztim/markdown:** Process markdown via function and Blade directives.
 
@@ -37,6 +38,7 @@ Then `composer require nztim/laravel-systems`
 NZTim\CommandBus\Laravel\CommandBusServiceProvider::class,
 NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
+NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
 ```
 
@@ -85,4 +87,5 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 - [nztim/commandbus](/src/CommandBus/readme.md)
 - [nztim/glide](/src/Glide/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
+- [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
