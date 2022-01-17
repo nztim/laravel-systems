@@ -1,0 +1,33 @@
+<?php declare(strict_types=1);
+
+namespace %%NAMESPACE%%;
+
+use %%CLASS%%;
+use Laminas\Hydrator\ReflectionHydrator;
+use Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
+use NZTim\ORM\CarbonDateTimeStrategy;
+use ReflectionClass;
+
+class %%HNAME%%
+{
+    protected ReflectionHydrator $hydrator;
+
+    public function __construct(ReflectionHydrator $hydrator)
+    {
+        $this->hydrator = $hydrator;
+        $hydrator->setNamingStrategy(new UnderscoreNamingStrategy());
+        $this->hydrator->addStrategy('created', new CarbonDateTimeStrategy());
+        $this->hydrator->addStrategy('updated', new CarbonDateTimeStrategy());
+    }
+
+    public function extract(%%SHORTCLASS%% $model): array
+    {
+        return $this->hydrator->extract($model);
+    }
+
+    public function hydrate(array $data): %%SHORTCLASS%%
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->hydrator->hydrate($data, (new ReflectionClass(%%SHORTCLASS%%::class))->newInstanceWithoutConstructor());
+    }
+}

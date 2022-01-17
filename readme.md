@@ -11,6 +11,7 @@ Includes:
 - **nztim/mailer2:** Email sending.
 - **nztim/glide:** Glide image helper.
 - **nztim/markdown:** Process markdown via function and Blade directives.
+- **nztim/orm:** Use laminas-hydrator in Laravel applications.
 - **nztim/queue:** Command bus queue for Laravel.
 
 ### Compatiblity
@@ -44,6 +45,7 @@ NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
+NZTim\ORM\Laravel\OrmServiceProvider::class,
 NZTim\Queue\QueueServiceProvider::class,
 ```
 
@@ -98,4 +100,5 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
+- [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
