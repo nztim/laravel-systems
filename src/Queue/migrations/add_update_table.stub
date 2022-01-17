@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateUpdateQueuemgrJobsTable extends Migration {
+
+    public function up()
+    {
+        schema()->dropIfExists('queuemgrjobs');
+        schema()->create('queuemgrjobs', function(Blueprint $table)
+        {
+            $table->bigIncrements('id');
+            $table->text('command');
+            $table->tinyInteger('attempts')->unsigned();
+            $table->dateTime('created');
+            $table->dateTime('updated');
+            $table->dateTime('completed')->nullable();
+        });
+    }
+
+    public function down()
+    {
+        schema()->dropIfExists('queuemgrjobs');
+    }
+}

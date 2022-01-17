@@ -9,6 +9,7 @@ Includes:
 - **nztim/mailer2:** Email sending.
 - **nztim/glide:** Glide image helper.
 - **nztim/markdown:** Process markdown via function and Blade directives.
+- **nztim/queue:** Command bus queue for Laravel.
 
 ### Compatiblity
 
@@ -40,13 +41,16 @@ NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
+NZTim\Queue\QueueServiceProvider::class,
 ```
 
-##### Configuration files
+##### Configuration
 
 ```php
 php artisan vendor:publish --provider=NZTim\CommandBus\Laravel\CommandBusServiceProvider::class
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
+
+php artisan qm:migration && php artisan migrate # Add queue table
 
 # commandbus.php
 'middleware' => [
