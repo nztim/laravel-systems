@@ -4,6 +4,7 @@ Package combining a number of existing projects for easy installation and mainte
 
 Includes:
 
+- **nztim/commandbus:** Simple command bus.
 - **nztim/logger2:** Complements standard Laravel logging.
 - **nztim/glide:** Glide image helper.
 - **nztim/markdown:** Process markdown via function and Blade directives.
@@ -33,6 +34,7 @@ Then `composer require nztim/laravel-systems`
 ##### Service providers
 
 ```php
+NZTim\CommandBus\Laravel\CommandBusServiceProvider::class,
 NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
@@ -41,7 +43,14 @@ NZTim\Markdown\MarkdownServiceProvider::class,
 ##### Configuration files
 
 ```php
+php artisan vendor:publish --provider=NZTim\CommandBus\Laravel\CommandBusServiceProvider::class
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
+
+# commandbus.php
+'middleware' => [
+    NZTim\CommandBus\Laravel\DbTransactionMiddleware::class,
+    NZTim\CommandBus\Laravel\LoggingMiddleware::class,
+],
 
 # filesystems.php
 'glide_source' => [
@@ -73,6 +82,7 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 
 ##### Readme files
 
+- [nztim/commandbus](/src/CommandBus/readme.md)
 - [nztim/glide](/src/Glide/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)

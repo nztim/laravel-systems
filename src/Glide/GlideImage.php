@@ -3,7 +3,6 @@
 namespace NZTim\Glide;
 
 use Illuminate\Http\UploadedFile;
-use JetBrains\PhpStorm\Pure;
 
 class GlideImage
 {

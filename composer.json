@@ -9,6 +9,7 @@
         "league/glide-laravel": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "monolog/monolog": "^2.0",
+        "psr/container": "^1.0",
         "swiftmailer/swiftmailer": "~6.0"
     },
     "require-dev": {
