@@ -93,3 +93,4 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
+- [nztim/queue](/src/Queue/readme.md)
