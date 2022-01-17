@@ -27,7 +27,6 @@ class %%HNAME%%
 
     public function hydrate(array $data): %%SHORTCLASS%%
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->hydrator->hydrate($data, (new ReflectionClass(%%SHORTCLASS%%::class))->newInstanceWithoutConstructor());
     }
 }
