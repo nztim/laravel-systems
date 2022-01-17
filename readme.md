@@ -5,6 +5,7 @@ Package combining a number of existing projects for easy installation and mainte
 Includes:
 
 - **nztim/commandbus:** Simple command bus.
+- **nztim/helpers:** Laravel helpers.
 - **nztim/input:** Input processing.
 - **nztim/logger2:** Complements standard Laravel logging.
 - **nztim/mailer2:** Email sending.
