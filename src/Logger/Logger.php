@@ -2,27 +2,25 @@
 
 namespace NZTim\Logger;
 
-use Monolog\Formatter\HtmlFormatter;
+use Illuminate\Contracts\Mail\Mailer as LaravelMailer;
+use Illuminate\Mail\Message as LaravelEmail;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
-use Swift_Mailer;
-use Swift_Message;
 use Throwable;
 
 class Logger
 {
     private array $config;
-    private Swift_Mailer $swiftMailer;
     private Cache $cache;
+    private LaravelMailer $mailer;
 
-    public function __construct(array $config, Swift_Mailer $swiftMailer, Cache $cache)
+    public function __construct(array $config, Cache $cache, LaravelMailer $mailer)
     {
         $this->config = $config;
-        $this->swiftMailer = $swiftMailer;
         $this->cache = $cache;
+        $this->mailer = $mailer;
     }
 
     public function info(string $channel, string $message, array $context = [])
@@ -64,10 +62,10 @@ class Logger
     {
         $channel = $this->cleanChannelName($channel);
         $logger = new MonologLogger($channel);
-        $this->addEmailHandler($logger, $level);
         $this->addLogFileHandler($logger, $channel);
         try {
             $logger->log($level, $message, $context);
+            $this->sendNotificationEmail($level, $message, $context);
         } catch (Throwable $e) {
             $this->writeExceptionMessage($e->getMessage(), $message);
         }
@@ -79,20 +77,26 @@ class Logger
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $channel)));
     }
 
-    private function addEmailHandler(MonologLogger $logger, int $level)
+    private function sendNotificationEmail(int $level, string $message, array $context)
     {
         $key = 'nztim-logger-throttle';
         if ($this->config['email']['send'] && $level >= MonologLogger::ERROR && !$this->cache->has($key)) {
-            $swiftMessage = (new Swift_Message)
-                ->setSubject('Log notification from: ' . $this->config['name'])
-                ->setFrom($this->config['email']['from'])
-                ->setTo($this->config['email']['to'])
-                ->setContentType('text/html');
-            $handler = new SwiftMailerHandler($this->swiftMailer, $swiftMessage);
-            $handler->setFormatter(new HtmlFormatter());
-            $logger->pushHandler($handler);
+            $this->mailer->raw($this->mailContent($message, $context), function ($email) {
+                /** @var LaravelEmail $email */
+                $email->from($this->config['email']['from']);
+                $email->to($this->config['email']['to']);
+                $email->subject('Log notification from: ' . $this->config['name']);
+            });
             $this->cache->put($key, true, 5);
         }
+    }
+
+    private function mailContent(string $message, array $context): string
+    {
+        $text = 'Log notification from: ' . $this->config['name'] . "\n\n";
+        $text .= $message . "\n\n";
+        $text .= json_encode($context);
+        return $text;
     }
 
     protected function addLogFileHandler(MonologLogger $logger, string $channel)
@@ -112,7 +116,7 @@ class Logger
     protected function filename($channel)
     {
         $s = DIRECTORY_SEPARATOR;
-        return  "{$this->config['log_path']}{$s}custom{$s}{$channel}.log";
+        return "{$this->config['log_path']}{$s}custom{$s}{$channel}.log";
     }
 
     protected function writeExceptionMessage(string $error, string $message)
