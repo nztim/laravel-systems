@@ -2,6 +2,8 @@
 
 use NZTim\Logger\Logger;
 use NZTim\Markdown\ParsedownExtraWithYouTubeEmbed;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
 
 // LOGGER2 --------------------------------------------------------------------
 
@@ -35,4 +37,14 @@ function markdown(string $content): string
     return $converter->text($content);
 }
 
+// SYMFONY MAILER FACTORY -----------------------------------------------------
+
+function getSymfonySmtpMailer(array $conf = null): Mailer
+{
+    if (is_null($conf)) {
+        $conf = config('mail.mailers.' . config('mail.default'));
+    }
+    $dsn = sprintf('smtp://%s:%s@%s:%s', $conf['username'], $conf['password'], $conf['host'], $conf['port']);
+    return new Mailer(Transport::fromDsn($dsn));
+}
 

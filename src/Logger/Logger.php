@@ -2,25 +2,22 @@
 
 namespace NZTim\Logger;
 
-use Illuminate\Contracts\Mail\Mailer as LaravelMailer;
-use Illuminate\Mail\Message as LaravelEmail;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\Mime\Email;
 use Throwable;
 
 class Logger
 {
     private array $config;
     private Cache $cache;
-    private LaravelMailer $mailer;
 
-    public function __construct(array $config, Cache $cache, LaravelMailer $mailer)
+    public function __construct(array $config, Cache $cache)
     {
         $this->config = $config;
         $this->cache = $cache;
-        $this->mailer = $mailer;
     }
 
     public function info(string $channel, string $message, array $context = [])
@@ -65,7 +62,7 @@ class Logger
         $this->addLogFileHandler($logger, $channel);
         try {
             $logger->log($level, $message, $context);
-            $this->sendNotificationEmail($level, $message, $context);
+            $this->sendErrorEmail($level, $message, $context);
         } catch (Throwable $e) {
             $this->writeExceptionMessage($e->getMessage(), $message);
         }
@@ -75,28 +72,6 @@ class Logger
     {
         // Regex: remove all chars not a-z,A-Z,0-9
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $channel)));
-    }
-
-    private function sendNotificationEmail(int $level, string $message, array $context)
-    {
-        $key = 'nztim-logger-throttle';
-        if ($this->config['email']['send'] && $level >= MonologLogger::ERROR && !$this->cache->has($key)) {
-            $this->mailer->raw($this->mailContent($message, $context), function ($email) {
-                /** @var LaravelEmail $email */
-                $email->from($this->config['email']['from']);
-                $email->to($this->config['email']['to']);
-                $email->subject('Log notification from: ' . $this->config['name']);
-            });
-            $this->cache->put($key, true, 5);
-        }
-    }
-
-    private function mailContent(string $message, array $context): string
-    {
-        $text = 'Log notification from: ' . $this->config['name'] . "\n\n";
-        $text .= $message . "\n\n";
-        $text .= json_encode($context);
-        return $text;
     }
 
     protected function addLogFileHandler(MonologLogger $logger, string $channel)
@@ -132,4 +107,30 @@ class Logger
         $level = strtoupper($level);
         return array_key_exists($level, MonologLogger::getLevels()) ? MonologLogger::getLevels()[$level] : MonologLogger::ERROR;
     }
+
+    // Error email ------------------------------------------------------------
+
+    private function sendErrorEmail(int $level, string $message, array $context)
+    {
+        $key = 'nztim-logger-throttle';
+        if (!$this->config['email']['send'] || $level < MonologLogger::ERROR || $this->cache->has($key)) {
+            return;
+        }
+        $message = (new Email())
+            ->from($this->config['email']['from'])
+            ->to($this->config['email']['to'])
+            ->subject('Log notification from: ' . $this->config['name'])
+            ->text($this->mailContent($message, $context));
+        getSymfonySmtpMailer()->send($message);
+        $this->cache->put($key, true, 5);
+    }
+
+    private function mailContent(string $message, array $context): string
+    {
+        $text = 'Log notification from: ' . $this->config['name'] . "\n\n";
+        $text .= $message . "\n\n";
+        $text .= json_encode($context);
+        return $text;
+    }
 }
+
