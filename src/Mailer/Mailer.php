@@ -49,7 +49,6 @@ class Mailer
             if ($message->bcc && !$message->recipientOverride) {
                 $email->bcc($message->bcc);
             }
-            $email->setId($message->messageId);
             $headers = $email->getHeaders();
             $headers->addTextHeader(Mailer::ID_HEADER, $message->messageId);
         });
@@ -88,7 +87,10 @@ class Mailer
 }
 
 /*
- * Whether you let SwiftMailer set the Message-ID header or you set it yourself, it's replaced by the sender so it doesn't make it through to the recipient.
- * However the SES delivery notification includes it as a header value, so messages can be tracked that way.
- * A custom header (X-Mailer2-ID) will go all the way to the recipient and should be included in notifications from all kinds of senders.
+ * LaravelMailer::send provides Illuminate\Mailer\Message $email
+ * Looks like the main purpose is to wrap the Symfony\Component\Mime\Email $message property
+ * and translate the api. Could switch to Symfony mailer direct, only need to sort out SMTP config which should be easy.
+ *
+ * Can no longer set the message id but the custom header (X-Mailer2-ID) should go all the way to the recipient
+ * and also be included in notifications from all kinds of senders.
  */

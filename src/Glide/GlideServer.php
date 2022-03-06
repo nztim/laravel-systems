@@ -5,6 +5,7 @@ namespace NZTim\Glide;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\UploadedFile;
 use League\Glide\Server;
+use RuntimeException;
 
 class GlideServer
 {
@@ -17,21 +18,27 @@ class GlideServer
         $this->server = $server;
     }
 
-    public function storeImage(UploadedFile $file, GlideImage $image)
-    {
-        if (!$this->storage->disk('glide_source')->exists($image->path(true))) {
-            $this->storage->disk('glide_source')->putFileAs($image->path(false), $file, $image->filename());
-        }
-    }
-
-    public function storeImageData(string $data, GlideImage $image)
+    public function storeImage(UploadedFile $file, GlideImage $image): void
     {
         if (!$this->storage->disk('glide_source')->exists($image->path())) {
-            $this->storage->disk('glide_source')->put($image->path(), $data);
+            $result = $this->storage->disk('glide_source')->putFileAs($image->path(false), $file, $image->filename());
+            if ($result === false) {
+                throw new RuntimeException('GlideServer::storeImage file write error.');
+            }
         }
     }
 
-    public function makeImage(GlideImage $image, array $params)
+    public function storeImageData(string $data, GlideImage $image): void
+    {
+        if (!$this->storage->disk('glide_source')->exists($image->path())) {
+            $result = $this->storage->disk('glide_source')->put($image->path(), $data);
+            if ($result === false) {
+                throw new RuntimeException('GlideServer::storeImageData file write error.');
+            }
+        }
+    }
+
+    public function makeImage(GlideImage $image, array $params): void
     {
         $this->server->makeImage($image->path(), $params);
     }

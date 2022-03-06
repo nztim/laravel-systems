@@ -21,21 +21,16 @@ class MessageSent
     public function __construct(array $data)
     {
         $this->date = now();
-        $fields = [
-            'sender',
-            'senderName',
-            'replyTo',
-            'recipient',
-            'cc',
-            'bcc',
-            'subject',
-            'html',
-            'text',
-            'messageId',
-        ];
-        foreach ($fields as $field) {
-            $this->$field = $data[$field] ?? '';
-        }
+        $this->sender = $data['sender'] ?? '';;
+        $this->senderName = $data['senderName'] ?? '';;
+        $this->replyTo = $data['replyTo'] ?? '';;
+        $this->recipient = $data['recipient'] ?? '';;
+        $this->cc = $data['cc'] ?? '';;
+        $this->bcc = $data['bcc'] ?? '';;
+        $this->subject = $data['subject'] ?? '';;
+        $this->html = $data['html'] ?? '';;
+        $this->text = $data['text'] ?? '';;
+        $this->messageId = $data['messageId'] ?? '';;
     }
 
     public function date(): Carbon
