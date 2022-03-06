@@ -17,9 +17,9 @@ Includes:
 ### Compatiblity
 
 | Version | PHP  | Laravel |
-| ------- | ---- | ------- |
-| 1.0     | 8.0  | 8.0     |
-
+| ------- |------| ------- |
+| 1.0     | ^8.0 | 8.0     |
+| 2.0     | ^8.0 | 9.0     |
 
 ### Installation
 
@@ -102,3 +102,7 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 - [nztim/markdown](/src/Markdown/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
+
+##### Upgrading
+
+* **2.0:** No API changes, SMTP mail config in newer format is now required for Logger.

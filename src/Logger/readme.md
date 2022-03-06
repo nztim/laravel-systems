@@ -35,7 +35,7 @@ For example, a message will be logged here when the system is unable to send an 
 ### Email alerts
 
 Emails are only triggered if email sending is turned on, `app.debug` is false and the level is at least ERROR severity.
-The Laravel mail system must be configured for emails to function.
+The Laravel mail system must be configured for SMTP and with the latest config format for emails to function.
 
 ### Changelog
 
