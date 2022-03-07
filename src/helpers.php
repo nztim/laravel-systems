@@ -44,7 +44,7 @@ function getSymfonySmtpMailer(array $conf = null): Mailer
     if (is_null($conf)) {
         $conf = config('mail.mailers.' . config('mail.default'));
     }
-    $dsn = sprintf('smtp://%s:%s@%s:%s', $conf['username'], $conf['password'], $conf['host'], $conf['port']);
+    $dsn = sprintf('smtp://%s:%s@%s:%s', urlencode($conf['username']), urlencode($conf['password']), $conf['host'], $conf['port']);
     return new Mailer(Transport::fromDsn($dsn));
 }
 
