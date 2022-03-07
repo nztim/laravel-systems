@@ -1,5 +1,8 @@
 <?php
 
+use Collective\Html\FormBuilder;
+use Illuminate\Database\Schema\Builder;
+
 function flash($message, $type = 'danger')
 {
     session()->flash('flash_message', $message);
@@ -118,3 +121,12 @@ function requestInfo(): array
     return $info;
 }
 
+function form(): FormBuilder
+{
+    return app(FormBuilder::class);
+}
+
+function schema(): Builder
+{
+    return app(Builder::class);
+}

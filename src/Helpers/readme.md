@@ -9,6 +9,8 @@
 * `sanitize(mixed $data)` - runs htmlspecialchars() and trim() on a string or an array of strings
 * `cached_asset($path)` - returns asset path with hashed integer value, e.g. `main.css` -> `main.847389233.css`
     * Note: .htaccess rule is required, see below
+* `form()` - replacement for `Form::` facade 
+* `schema()` - replacement for `Schema::` facade
 
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
