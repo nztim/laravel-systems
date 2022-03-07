@@ -105,4 +105,4 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 
 ##### Upgrading
 
-* **2.0:** No API changes, SMTP mail config in newer format is now required for Logger.
+* **2.0:** No API changes, SMTP mail config in newer format is now required for Logger. `form()` and `schema()` helpers are now in this package so can be removed from the application.
