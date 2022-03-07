@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateMailLogTable extends Migration
+{
+    public function up()
+    {
+        schema()->create('mail_log', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('type')->index();
+            $table->dateTime('date')->index();
+            $table->string('message_id');
+            $table->string('recipient')->index();
+            $table->text('data');
+            $table->dateTime('created');
+        });
+    }
+
+    public function down()
+    {
+        schema()->dropIfExists('mail_log');
+    }
+}

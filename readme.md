@@ -44,6 +44,7 @@ NZTim\Helpers\HelpersServiceProvider::class,
 NZTim\Logger\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
+NZTim\MailLog\MailLogServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
 NZTim\ORM\Laravel\OrmServiceProvider::class,
 NZTim\Queue\QueueServiceProvider::class,
@@ -55,7 +56,7 @@ NZTim\Queue\QueueServiceProvider::class,
 php artisan vendor:publish --provider=NZTim\CommandBus\Laravel\CommandBusServiceProvider::class
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
 
-php artisan qm:migration && php artisan migrate # Add queue table
+php artisan qm:migration && php artisan maillog:migration && php artisan migrate # Add tables for queue and maillog
 
 # commandbus.php
 'middleware' => [
@@ -64,6 +65,10 @@ php artisan qm:migration && php artisan migrate # Add queue table
 ],
 
 # filesystems.php
+'emails' => [
+    'driver' => 'local',
+    'root'   => storage_path('app/emails'),
+],
 'glide_source' => [
     'driver' => 's3',
     'key'    => env('S3_ACCESS'),
@@ -99,6 +104,7 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 - [nztim/input](/src/Input/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
+- [nztim/maillog](/src/MailLog/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
