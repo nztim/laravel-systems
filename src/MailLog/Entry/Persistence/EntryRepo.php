@@ -2,6 +2,7 @@
 
 namespace NZTim\MailLog\Entry\Persistence;
 
+use Carbon\Carbon;
 use NZTim\MailLog\Entry\Entry;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -27,16 +28,10 @@ class EntryRepo
         return $row ? $this->hydrate($row) : null;
     }
 
-    public function findByIdMultiple(array $ids): Collection
+    public function findOlderThanDays(Carbon $date): Collection
     {
-        $rows = $this->db->table($this->table)->whereIn('id', $ids)->get();
+        $rows = $this->db->table($this->table)->where('date', '<', $date)->get();
         return $this->hydrateCollection($rows);
-    }
-
-    public function findBySlug(string $slug, string $exclusion = '', string $column = 'slug'): ?Entry
-    {
-        $row = $this->db->table($this->table)->where($column, $slug)->where($column, '!=', $exclusion)->first();
-        return $row ? $this->hydrate($row) : null;
     }
 
     // Hydrate ----------------------------------------------------------------
@@ -64,5 +59,10 @@ class EntryRepo
         }
         $this->db->table($this->table)->where('id', $model->id())->update($data);
         return $model->id();
+    }
+
+    public function delete(Entry $entry): void
+    {
+        $this->db->table($this->table)->where('id', $entry->id())->delete();
     }
 }

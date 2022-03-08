@@ -15,6 +15,7 @@ class MailLogServiceProvider extends ServiceProvider
     {
         $this->commands([
             AddMigrationCommand::class,
+            DeleteOldEntriesCommand::class,
         ]);
     }
 }

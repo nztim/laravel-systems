@@ -2,18 +2,6 @@
 
 Package combining a number of existing projects for easy installation and maintenance.
 
-Includes:
-
-- **nztim/commandbus:** Simple command bus.
-- **nztim/helpers:** Laravel helpers.
-- **nztim/input:** Input processing.
-- **nztim/logger2:** Complements standard Laravel logging.
-- **nztim/mailer2:** Email sending.
-- **nztim/glide:** Glide image helper.
-- **nztim/markdown:** Process markdown via function and Blade directives.
-- **nztim/orm:** Use laminas-hydrator in Laravel applications.
-- **nztim/queue:** Command bus queue for Laravel.
-
 ### Compatiblity
 
 | Version | PHP  | Laravel |
@@ -94,6 +82,14 @@ S3_BUCKET=
 # LOGGER
 LOGGER_EMAIL_SENDER=app@example.org
 LOGGER_EMAIL_RECIPIENT=dev@example.org
+```
+
+##### Scheduler entries
+
+```php 
+$schedule->command('qm:daemon 50')     ->everyMinute();
+$schedule->command('qm:logstatus')     ->dailyAt('4:00');
+$schedule->command('maillog:prune')    ->dailyAt('4:02');
 ```
 
 ##### Readme files
