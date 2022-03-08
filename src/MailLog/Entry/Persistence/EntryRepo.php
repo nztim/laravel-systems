@@ -3,6 +3,7 @@
 namespace NZTim\MailLog\Entry\Persistence;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use NZTim\MailLog\Entry\Entry;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -32,6 +33,19 @@ class EntryRepo
     {
         $rows = $this->db->table($this->table)->where('date', '<', $date)->get();
         return $this->hydrateCollection($rows);
+    }
+
+    public function index(string $search = '', string $type = ''): LengthAwarePaginator
+    {
+        $query = $this->db->table($this->table);
+        if (strlen($search)) {
+            $query = $query->where('recipient', 'LIKE', "%{$search}%");
+        }
+        if (strlen($type)) {
+            $query = $query->where('type', $type);
+        }
+        $results = $query->orderBy('date', 'desc')->paginate(25);
+        return $results->setCollection($this->hydrateCollection($results->getCollection()));
     }
 
     // Hydrate ----------------------------------------------------------------

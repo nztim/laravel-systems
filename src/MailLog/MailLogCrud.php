@@ -20,9 +20,9 @@ class MailLogCrud
 
     public function createFromMessageSent(MessageSent $messageSent): void
     {
-        $entry = Entry::createFromMessageSent($messageSent);
-        $id = $this->entryRepo->persist($entry);
-        $entry = $this->entryRepo->findById($id);
-        $this->fileRepo->store($entry, $messageSent->html(), $messageSent->text());
+        $htmlPath = $this->fileRepo->store($messageSent->html(), 'html');
+        $textPath = $this->fileRepo->store($messageSent->text(), 'txt');
+        $entry = Entry::fromMessageSent($messageSent, $htmlPath, $textPath);
+        $this->entryRepo->persist($entry);
     }
 }

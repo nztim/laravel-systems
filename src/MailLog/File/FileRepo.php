@@ -2,6 +2,7 @@
 
 namespace NZTim\MailLog\File;
 
+use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use NZTim\MailLog\Entry\Entry;
@@ -9,38 +10,43 @@ use NZTim\MailLog\Entry\Entry;
 class FileRepo
 {
     private Filesystem $storage;
+    private Repository $cache;
 
-    public function __construct(FilesystemManager $fsManager)
+    public function __construct(FilesystemManager $fsManager, Repository $cache)
     {
         $this->storage = $fsManager->disk('emails');
+        $this->cache = $cache;
     }
 
-    public function store(Entry $entry, string $html, string $text): void
+    public function store(string $content, string $extension): string
     {
-        $this->storage->put($entry->id() . ".html", $html);
-        $this->storage->put($entry->id() . ".txt", $text);
+        $hash = md5($content);
+        $path = substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . ".{$extension}";
+        $this->storage->put($path, $content);
+        return $path;
     }
 
-    public function getContent(Entry $entry): Content
+    public function getHtml(Entry $entry): string
     {
-        $html = '';
-        if ($this->storage->exists($entry->id() . '.html')) {
-            $html = $this->storage->get($entry->id() . '.html');
-        }
-        $text = '';
-        if ($this->storage->exists($entry->id() . '.txt')) {
-            $text = $this->storage->get($entry->id() . '.txt');
-        }
-        return new Content($html, $text);
+        $key = 'maillog-html-' . $entry->id();
+        return $this->cache->remember($key, now()->addDay(), function () use ($entry) {
+            if ($this->storage->exists($entry->htmlFilePath())) {
+                return $this->storage->get($entry->htmlFilePath());
+            }
+            return '';
+        });
     }
 
     public function deleteContent(Entry $entry): void
     {
-        if ($this->storage->exists($entry->id() . '.html')) {
-            $this->storage->delete($entry->id() . '.html');
+        if (!$entry->hasContent()) {
+            return;
         }
-        if ($this->storage->exists($entry->id() . '.txt')) {
-            $this->storage->delete($entry->id() . '.txt');
+        if ($this->storage->exists($entry->htmlFilePath())) {
+            $this->storage->delete($entry->htmlFilePath());
+        }
+        if ($this->storage->exists($entry->textFilePath())) {
+            $this->storage->delete($entry->textFilePath());
         }
     }
 }
