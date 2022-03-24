@@ -107,4 +107,5 @@ $schedule->command('maillog:prune')    ->dailyAt('4:02');
 
 ##### Upgrading
 
+* **2.2:** Add MailLog package. To activate, configure and register the service provider. Also fix PHP 8.1 deprecation notices.
 * **2.0:** No API changes, SMTP mail config in newer format is now required for Logger. `form()` and `schema()` helpers are now in this package so can be removed from the application.

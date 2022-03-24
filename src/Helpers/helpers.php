@@ -17,7 +17,7 @@ function sanitize($data)
         }
         return $data;
     }
-    return htmlspecialchars(trim($data), ENT_HTML5, 'UTF-8', false);
+    return htmlspecialchars(trim(strval($data)), ENT_HTML5, 'UTF-8', false);
 }
 
 // Matches http(s)://anything.anything until whitespace and links it
