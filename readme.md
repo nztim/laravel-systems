@@ -29,7 +29,7 @@ Then `composer require nztim/laravel-systems`
 ```php
 NZTim\CommandBus\Laravel\CommandBusServiceProvider::class,
 NZTim\Helpers\HelpersServiceProvider::class,
-NZTim\Logger\GlideServiceProvider::class,
+NZTim\Glide\GlideServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
 NZTim\MailLog\MailLogServiceProvider::class,
