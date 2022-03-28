@@ -76,7 +76,7 @@ class Logger
 
     protected function addLogFileHandler(MonologLogger $logger, string $channel)
     {
-        $handler = new RotatingFileHandler($this->filename($channel), $this->config['max_daily']);
+        $handler = new RotatingFileHandler($this->filename($channel), $this->config['max_daily'], MonologLogger::DEBUG, true, 0640);
         if (in_array($channel, $this->config['single'])) {
             $handler = new StreamHandler($this->filename($channel));
         }
