@@ -45,6 +45,7 @@ class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
         $classes = explode(' ', $inline['element']['attributes']['class'] ?? '');
         if (in_array('target_blank', $classes)) {
             $inline['element']['attributes']['target'] = '_blank';
+            $inline['element']['attributes']['rel'] = 'noopener';
             return $inline;
         }
         // Return unchanged
