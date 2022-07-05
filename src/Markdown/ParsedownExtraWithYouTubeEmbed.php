@@ -21,11 +21,16 @@ class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
 
     private function handleLink($inline)
     {
-        // If null, it's not a link
-        if (!$inline) {
+        // Make sure it's a link
+        if (!$inline || $inline['element']['name'] !== 'a') {
             return $inline;
         }
+        // Get the href
         $url = $inline['element']['attributes']['href'] ?? '';
+        // Without a URL no need to process further
+        if (!$url) {
+            return $inline;
+        }
         // YouTube handler
         $ytCode = $this->parseYouTube($url);
         if ($ytCode) {
@@ -35,6 +40,12 @@ class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
         $jfCode = $this->parseJotForm($url);
         if ($jfCode) {
             return $this->embedJotForm($inline, $jfCode);
+        }
+        // "target_blank" class handler
+        $classes = explode(' ', $inline['element']['attributes']['class'] ?? '');
+        if (in_array('target_blank', $classes)) {
+            $inline['element']['attributes']['target'] = '_blank';
+            return $inline;
         }
         // Return unchanged
         return $inline;
