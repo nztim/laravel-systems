@@ -23,7 +23,7 @@ class HelpersServiceProvider extends ServiceProvider
         });
 
         $blade->directive('pagination', function ($paginator) {
-            return "<?php echo with($paginator)->appends(Request::except('page'))->render(); ?>";
+            return "<?php echo with($paginator)->appends(request()->except('page'))->render(); ?>";
         });
 
         $blade->directive('formerror', function ($label) {
