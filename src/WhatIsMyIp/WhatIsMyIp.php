@@ -22,5 +22,5 @@ class WhatIsMyIp
 }
 
 /*
- * Alternatively use gethostbyname(config('app.url'))
+ * Alternatively use gethostbyname() with domain extracted from config('app.url')
  */

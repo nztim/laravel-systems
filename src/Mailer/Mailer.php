@@ -28,6 +28,9 @@ class Mailer
     public function send(AbstractMessage $message): ?MessageSent
     {
         $this->validate($message);
+        if (!$this->validRecipient($message->recipient)) {
+            return null;
+        }
         $data = array_merge($message->data, ['nztmailerSubject' => $message->subject]);
         $html = $this->cssInliner->process(view($message->view)->with($data)->render());
         $text = $this->converter->convert($html);
@@ -83,6 +86,22 @@ class Mailer
         Assertion::nullOrEmail($message->cc, 'cc not an email address');
         Assertion::nullOrEmail($message->bcc, 'bcc not an email address');
         Assertion::isArray($message->data, 'Data not an array');
+    }
+
+    private function validRecipient(string $recipient): bool
+    {
+        $domains = [
+            '*@example.org',
+            '*@example.com',
+            '*.invalid',
+        ];
+        foreach ($domains as $domain) {
+            if (str_is($domain, $recipient)) {
+                log_warning('laravel', 'Skipped sending email to invalid recipient: ' . $recipient);
+                return false;
+            }
+        }
+        return true;
     }
 }
 
