@@ -130,3 +130,13 @@ function schema(): Builder
 {
     return app(Builder::class);
 }
+
+function faker(int $seed = null): \Faker\Generator
+{
+    /** @var \Faker\Generator $faker */
+    $faker = app(\Faker\Generator::class);
+    if ($seed) {
+        $faker->seed($seed);
+    }
+    return $faker;
+}

@@ -1,5 +1,7 @@
 <?php namespace NZTim\Helpers;
 
+use Faker\Factory;
+use Faker\Generator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -8,6 +10,15 @@ use Illuminate\View\Compilers\BladeCompiler;
 
 class HelpersServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->app->singleton(Generator::class, function () {
+            $faker = Factory::create('en_NZ');
+            $faker->addProvider(new FakerSafeEmailProvider($faker));
+            return $faker;
+        });
+    }
+
     public function boot()
     {
         // Blade directives ---------------------------------------------------
