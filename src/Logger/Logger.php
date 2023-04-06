@@ -4,6 +4,7 @@ namespace NZTim\Logger;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Level;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\Mime\Email;
@@ -14,6 +15,26 @@ class Logger
     private array $config;
     private Cache $cache;
 
+    public const DEBUG = 100;
+    public const INFO = 200;
+    public const NOTICE = 250;
+    public const WARNING = 300;
+    public const ERROR = 400;
+    public const CRITICAL = 500;
+    public const ALERT = 550;
+    public const EMERGENCY = 600;
+
+    private array $levels = [
+        Logger::DEBUG     => 100,
+        Logger::INFO      => 200,
+        Logger::NOTICE    => 250,
+        Logger::WARNING   => 300,
+        Logger::ERROR     => 400,
+        Logger::CRITICAL  => 500,
+        Logger::ALERT     => 550,
+        Logger::EMERGENCY => 600,
+    ];
+
     public function __construct(array $config, Cache $cache)
     {
         $this->config = $config;
@@ -22,37 +43,37 @@ class Logger
 
     public function info(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::INFO, $message, $context);
+        $this->add($channel, Logger::INFO, $message, $context);
     }
 
     public function notice(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::NOTICE, $message, $context);
+        $this->add($channel, Logger::NOTICE, $message, $context);
     }
 
     public function warning(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::WARNING, $message, $context);
+        $this->add($channel, Logger::WARNING, $message, $context);
     }
 
     public function error(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::ERROR, $message, $context);
+        $this->add($channel, Logger::ERROR, $message, $context);
     }
 
     public function critical(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::CRITICAL, $message, $context);
+        $this->add($channel, Logger::CRITICAL, $message, $context);
     }
 
     public function alert(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::ALERT, $message, $context);
+        $this->add($channel, Logger::ALERT, $message, $context);
     }
 
     public function emergency(string $channel, string $message, array $context = [])
     {
-        $this->add($channel, MonologLogger::EMERGENCY, $message, $context);
+        $this->add($channel, Logger::EMERGENCY, $message, $context);
     }
 
     public function add(string $channel, int $level, string $message, array $context = [])
@@ -76,7 +97,7 @@ class Logger
 
     protected function addLogFileHandler(MonologLogger $logger, string $channel)
     {
-        $handler = new RotatingFileHandler($this->filename($channel), $this->config['max_daily'], MonologLogger::DEBUG, true, 0640);
+        $handler = new RotatingFileHandler($this->filename($channel), $this->config['max_daily'], Logger::DEBUG, true, 0640);
         if (in_array($channel, $this->config['single'])) {
             $handler = new StreamHandler($this->filename($channel));
         }
@@ -105,7 +126,7 @@ class Logger
     public function translateLevel(string $level): int
     {
         $level = strtoupper($level);
-        return array_key_exists($level, MonologLogger::getLevels()) ? MonologLogger::getLevels()[$level] : MonologLogger::ERROR;
+        return $this->levels[$level] ?? Logger::ERROR;
     }
 
     // Error email ------------------------------------------------------------
@@ -113,7 +134,7 @@ class Logger
     private function sendErrorEmail(int $level, string $message, array $context)
     {
         $key = 'nztim-logger-throttle';
-        if (!$this->config['email']['send'] || $level < MonologLogger::ERROR || $this->cache->has($key)) {
+        if (!$this->config['email']['send'] || $level < Logger::ERROR || $this->cache->has($key)) {
             return;
         }
         $message = (new Email())
