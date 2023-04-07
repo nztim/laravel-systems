@@ -1,4 +1,6 @@
-<?php namespace NZTim\Tests\CommandBus;
+<?php
+
+namespace NZTim\Tests\CommandBus;
 
 use LogicException;
 use NZTim\CommandBus\Mapping\MapByName;

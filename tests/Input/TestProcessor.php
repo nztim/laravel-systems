@@ -1,4 +1,6 @@
-<?php namespace NZTim\Tests\Input;
+<?php
+
+namespace NZTim\Tests\Input;
 
 use NZTim\Input\BaseProcessor;
 

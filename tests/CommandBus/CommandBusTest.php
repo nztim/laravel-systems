@@ -5,7 +5,7 @@ namespace NZTim\Tests\CommandBus;
 use NZTim\CommandBus\CommandBus;
 use NZTim\CommandBus\Middleware;
 use NZTim\Tests\CommandBus\Fixtures\AddTaskCommand;
-use PHPUnit\Framework\TestCase;
+use NZTim\Tests\TestCase;
 
 class CommandBusTest extends TestCase
 {

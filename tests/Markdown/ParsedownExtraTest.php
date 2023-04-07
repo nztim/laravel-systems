@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
+namespace NZTim\Tests\Markdown;
+
 use NZTim\Markdown\ParsedownExtraWithYouTubeEmbed;
-use PHPUnit\Framework\TestCase;
+use NZTim\Tests\TestCase;
 
 class ParsedownExtraTest extends TestCase
 {

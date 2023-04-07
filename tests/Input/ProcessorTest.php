@@ -1,11 +1,13 @@
-<?php namespace NZTim\Tests\Input;
+<?php
+
+namespace NZTim\Tests\Input;
 
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory;
-use PHPUnit\Framework\TestCase;
+use NZTim\Tests\TestCase;
 
 class ProcessorTest extends TestCase
 {

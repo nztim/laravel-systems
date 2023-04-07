@@ -1,7 +1,9 @@
-<?php namespace NZTim\Tests\CommandBus;
+<?php
+
+namespace NZTim\Tests\CommandBus;
 
 use NZTim\CommandBus\Mapping\MapItem;
-use PHPUnit\Framework\TestCase;
+use NZTim\Tests\TestCase;
 
 class MapItemTest extends TestCase
 {
