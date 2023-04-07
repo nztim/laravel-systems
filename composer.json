@@ -6,6 +6,7 @@
         "php": "^8.1",
         "beberlei/assert": "^3.2",
         "erusev/parsedown-extra": "^0.8.1",
+        "guzzlehttp/guzzle": "^7.0",
         "laminas/laminas-hydrator": "^4.0",
         "laravel/framework": "^10.0",
         "league/glide": "^2.0",
@@ -13,7 +14,6 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/html-to-markdown": "^5.0",
         "monolog/monolog": "^3.0",
-        "nztim/simplehttp": "^3.0",
         "psr/container": "^1.0",
         "tijsverkoyen/css-to-inline-styles": "^2.2.2"
     },
@@ -31,11 +31,5 @@
         "exclude-from-classmap": [
             "vendor/erusev/parsedown-extra/test/"
         ]
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/nztim/simplehttp"
-        }
-    ]
+    }
 }

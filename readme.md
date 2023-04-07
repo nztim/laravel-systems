@@ -98,10 +98,12 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 - [nztim/markdown](/src/Markdown/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
+- [nztim/simplehttp](/src/SimpleHttp/readme.md)
 - [nztim/sns](/src/SNS/readme.md)
 
 ##### Upgrading
 
+* **3.0:** Laravel 10, add SNS, SES and SimpleHttp packages.
 * **2.9:** Remove MailLog package.
 * **2.8:** Add WhatIsMyIp
 * **2.2:** Add MailLog package. To activate, configure and register the service provider. Also fix PHP 8.1 deprecation notices.
