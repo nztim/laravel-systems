@@ -13,6 +13,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/html-to-markdown": "^5.0",
         "monolog/monolog": "^3.0",
+        "nztim/simplehttp": "^3.0",
         "psr/container": "^1.0",
         "tijsverkoyen/css-to-inline-styles": "^2.2.2"
     },
@@ -21,8 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "NZTim\\": "src/",
-            "NZTim\\Tests\\": "tests/"
+            "NZTim\\": "src/"
         },
         "files": [
             "src/Helpers/helpers.php",
@@ -31,5 +31,11 @@
         "exclude-from-classmap": [
             "vendor/erusev/parsedown-extra/test/"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/nztim/simplehttp"
+        }
+    ]
 }

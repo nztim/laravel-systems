@@ -98,6 +98,7 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 - [nztim/markdown](/src/Markdown/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
+- [nztim/sns](/src/SNS/readme.md)
 
 ##### Upgrading
 
