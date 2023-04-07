@@ -66,6 +66,10 @@ php artisan qm:migration && php artisan migrate # Add tables for queue and maill
     'driver' => 'local',
     'root'   => storage_path('app/cache'),
 ],
+
+# services.php 
+'geolocate_domain' => 'geo.xyz.com',
+ 
 ```
 
 ##### .env values
@@ -106,7 +110,7 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 
 ##### Upgrading
 
-* **3.0:** Laravel 10, add SNS, SES and SimpleHttp packages. SES major revision, requires refactoring.
+* **3.0:** Laravel 10, add SNS, SES, SimpleHttp packages and geolocate helper. SES major revision, requires refactoring.
 * **2.9:** Remove MailLog package.
 * **2.8:** Add WhatIsMyIp
 * **2.2:** Add MailLog package. To activate, configure and register the service provider. Also fix PHP 8.1 deprecation notices.
