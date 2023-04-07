@@ -36,6 +36,7 @@ NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
 NZTim\ORM\Laravel\OrmServiceProvider::class,
 NZTim\Queue\QueueServiceProvider::class,
+NZTim\SES\SesServiceProvider::class,
 ```
 
 ##### Configuration
@@ -43,6 +44,7 @@ NZTim\Queue\QueueServiceProvider::class,
 ```php
 php artisan vendor:publish --provider=NZTim\CommandBus\Laravel\CommandBusServiceProvider::class
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
+php artisan vendor:publish --provider=NZTim\SES\SesServiceProvider
 
 php artisan qm:migration && php artisan migrate # Add tables for queue and maillog
 
@@ -98,12 +100,13 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 - [nztim/markdown](/src/Markdown/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
+- [nztim/ses](/src/SES/readme.md)
 - [nztim/simplehttp](/src/SimpleHttp/readme.md)
 - [nztim/sns](/src/SNS/readme.md)
 
 ##### Upgrading
 
-* **3.0:** Laravel 10, add SNS, SES and SimpleHttp packages.
+* **3.0:** Laravel 10, add SNS, SES and SimpleHttp packages. SES major revision, requires refactoring.
 * **2.9:** Remove MailLog package.
 * **2.8:** Add WhatIsMyIp
 * **2.2:** Add MailLog package. To activate, configure and register the service provider. Also fix PHP 8.1 deprecation notices.
