@@ -4,7 +4,6 @@ namespace NZTim\Logger;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
-use Monolog\Level;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\Mime\Email;
@@ -25,14 +24,14 @@ class Logger
     public const EMERGENCY = 600;
 
     private array $levels = [
-        Logger::DEBUG     => 100,
-        Logger::INFO      => 200,
-        Logger::NOTICE    => 250,
-        Logger::WARNING   => 300,
-        Logger::ERROR     => 400,
-        Logger::CRITICAL  => 500,
-        Logger::ALERT     => 550,
-        Logger::EMERGENCY => 600,
+        'DEBUG'     => Logger::DEBUG,
+        'INFO'      => Logger::INFO,
+        'NOTICE'    => Logger::NOTICE,
+        'WARNING'   => Logger::WARNING,
+        'ERROR'     => Logger::ERROR,
+        'CRITICAL'  => Logger::CRITICAL,
+        'ALERT'     => Logger::ALERT,
+        'EMERGENCY' => Logger::EMERGENCY,
     ];
 
     public function __construct(array $config, Cache $cache)
