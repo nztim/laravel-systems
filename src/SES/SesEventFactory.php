@@ -59,7 +59,6 @@ class SesEventFactory
 
     private function notification(NotificationEvent $sns): ?SesEvent
     {
-        log_info('ses', $sns->message);
         $data = json_decode($sns->message, true);
         if (!is_array($data)) {
             throw new \RuntimeException("Unable to decode json from message: " . $sns->message);
