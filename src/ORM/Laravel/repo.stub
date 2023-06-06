@@ -4,13 +4,14 @@ namespace %%NAMESPACE%%;
 
 use %%CLASS%%;
 use Illuminate\Database\Connection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use stdClass;
 
 class %%RNAME%%
 {
-    protected %%HNAME%% $hydrator;
-    protected Connection $db;
+    private %%HNAME%% $hydrator;
+    private Connection $db;
     private string $table = '%%TABLENAME%%';
 
     public function __construct(%%HNAME%% $hydrator, Connection $db)
@@ -65,10 +66,10 @@ class %%RNAME%%
     public function persist(%%SHORTCLASS%% $model): int
     {
         $data = $this->hydrator->extract($model);
-        if (is_null($model->id())) {
+        if (is_null($model->id)) {
             return $this->db->table($this->table)->insertGetId($data);
         }
-        $this->db->table($this->table)->where('id', $model->id())->update($data);
-        return $model->id();
+        $this->db->table($this->table)->where('id', $model->id)->update($data);
+        return $model->id;
     }
 }
