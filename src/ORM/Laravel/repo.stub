@@ -65,6 +65,7 @@ class %%RNAME%%
 
     public function persist(%%SHORTCLASS%% $model): int
     {
+        $model->updated = now();
         $data = $this->hydrator->extract($model);
         if (is_null($model->id)) {
             return $this->db->table($this->table)->insertGetId($data);
