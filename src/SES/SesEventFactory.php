@@ -63,7 +63,12 @@ class SesEventFactory
         if (!is_array($data)) {
             throw new \RuntimeException("Unable to decode json from message: " . $sns->message);
         }
-        return match (array_get($data, 'notificationType', '')) {
+        $type = array_get($data, 'notificationType', '');
+        if ($type === 'AmazonSnsSubscriptionSucceeded') {
+            log_info('ses', 'AmazonSnsSubscriptionSucceeded message received: ' . json_encode($data));
+            return null;
+        }
+        return match ($type) {
             'Bounce' => new SesBounce($data),
             'Complaint' => new SesComplaint($data),
             'Delivery' => new SesDelivery($data),
@@ -75,4 +80,7 @@ class SesEventFactory
 /*
  * Top-level object contains: notificationType, mail, [bounce|complaint|delivery]
  * This page has all permutations: https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html
+ *
+ * In addition, it's possible to receive a type:Notification subtype:AmazonSnsSubscriptionSucceeded, just a confirmation that the SNS subscription was activated.
+ * The above logs and ignores it. Could be handled via SNS although the message originates with SES.
  */
