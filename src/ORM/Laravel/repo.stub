@@ -40,6 +40,25 @@ class %%RNAME%%
         return $row ? $this->hydrate($row) : null;
     }
 
+    // Write ------------------------------------------------------------------
+
+    public function persist(%%SHORTCLASS%% $model): int
+    {
+        $model->updated = now();
+        $data = $this->hydrator->extract($model);
+        if (is_null($model->id)) {
+            return $this->db->table($this->table)->insertGetId($data);
+        }
+        $this->db->table($this->table)->where('id', $model->id)->update($data);
+        return $model->id;
+    }
+
+    public function persistAndReturn(%%SHORTCLASS%% $model): %%SHORTCLASS%%
+    {
+        $id = $this->persist($model);
+        return $this->findById($id);
+    }
+
     // Hydrate ----------------------------------------------------------------
 
     private function hydrate(stdClass $data): %%SHORTCLASS%%
@@ -59,18 +78,5 @@ class %%RNAME%%
     private function hydrateLengthAwarePaginator(LengthAwarePaginator $paginator): LengthAwarePaginator
     {
         return $paginator->setCollection($this->hydrateCollection($paginator->getCollection()));
-    }
-
-    // Write ------------------------------------------------------------------
-
-    public function persist(%%SHORTCLASS%% $model): int
-    {
-        $model->updated = now();
-        $data = $this->hydrator->extract($model);
-        if (is_null($model->id)) {
-            return $this->db->table($this->table)->insertGetId($data);
-        }
-        $this->db->table($this->table)->where('id', $model->id)->update($data);
-        return $model->id;
     }
 }
