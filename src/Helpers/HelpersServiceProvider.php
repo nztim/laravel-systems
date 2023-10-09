@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory as LaravelValidator;
+use Illuminate\Validation\Validator;
 use Illuminate\View\Compilers\BladeCompiler;
 
 class HelpersServiceProvider extends ServiceProvider
@@ -43,6 +44,7 @@ class HelpersServiceProvider extends ServiceProvider
 
         // Validation ---------------------------------------------------------
 
+        /** @var LaravelValidator $laravelValidator */
         $laravelValidator = app(LaravelValidator::class);
 
         // Common passwords validator, based on https://github.com/unicodeveloper/laravel-password
@@ -66,6 +68,12 @@ class HelpersServiceProvider extends ServiceProvider
             return strtotime($value) >= strtotime($referenceDate);
         };
         $laravelValidator->extend('after_or_equal', $validate, 'Invalid date');
+
+        // UTF-8 string validator
+        $validate = function ($attribute, $value, $parameters, Validator $validator) {
+            return mb_check_encoding($value, 'UTF-8');
+        };
+        $laravelValidator->extend('utf8', $validate, 'Invalid input');
 
         // Commands -----------------------------------------------------------
 

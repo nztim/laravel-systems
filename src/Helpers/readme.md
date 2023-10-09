@@ -23,6 +23,7 @@
 * `commonpwd` - ensures a password is not on a list of 10,000 common passwords
 * `fileext:jpg,jpeg,png,gif` - validates file extension
 * `after_or_equal:2019-11-01` - date is after or equal date provided, uses strtotime for comparison
+* `utf8` - validates UTF-8 string
 
 ### .htaccess for `cached_asset()`
 Add this before the Laravel rewrite rule
