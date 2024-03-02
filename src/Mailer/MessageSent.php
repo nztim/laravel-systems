@@ -11,8 +11,8 @@ class MessageSent
     private string $senderName;
     private string $replyTo;
     private string $recipient;
-    private string $cc;
-    private string $bcc;
+    private string|array $cc;
+    private string|array $bcc;
     private string $subject;
     private string $html;
     private string $text;
@@ -58,12 +58,12 @@ class MessageSent
         return $this->recipient;
     }
 
-    public function cc(): string
+    public function cc(): string|array
     {
         return $this->cc;
     }
 
-    public function bcc(): string
+    public function bcc(): string|array
     {
         return $this->bcc;
     }

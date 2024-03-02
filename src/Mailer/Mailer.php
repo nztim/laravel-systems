@@ -83,8 +83,12 @@ class Mailer
         Assertion::nullOrString($message->senderName, 'SenderName invalid');
         Assertion::nullOrEmail($message->replyTo, 'ReplyTo not an email address');
         Assertion::nullOrEmail($message->recipientOverride, 'recipientOverride not an email address');
-        Assertion::nullOrEmail($message->cc, 'cc not an email address');
-        Assertion::nullOrEmail($message->bcc, 'bcc not an email address');
+        foreach (array_wrap($message->cc) as $address) {
+            Assertion::nullOrEmail($address, "{$address} not an email address");
+        }
+        foreach (array_wrap($message->bcc) as $address) {
+            Assertion::nullOrEmail($address, "{$address} not an email address");
+        }
         Assertion::isArray($message->data, 'Data not an array');
     }
 
