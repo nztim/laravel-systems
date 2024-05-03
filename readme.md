@@ -110,6 +110,7 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 
 ##### Upgrading
 
+* **4.0:** Transitional - L10 compatible with updates for L11. Changed Glide ResponseFactory to Symfony.
 * **3.0:** Laravel 10, add SNS, SES, SimpleHttp packages and geolocate helper. SES major revision, requires refactoring.
 * **2.9:** Remove MailLog package.
 * **2.8:** Add WhatIsMyIp
