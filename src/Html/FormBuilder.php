@@ -2,7 +2,6 @@
 
 namespace NZTim\Html;
 
-use BadMethodCallException;
 use DateTime;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Contracts\Session\Session;
@@ -12,127 +11,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Traits\Macroable;
 
 class FormBuilder
 {
-    use Macroable, Componentable {
-        Macroable::__call as macroCall;
-        Componentable::__call as componentCall;
-    }
+    private UrlGenerator $url;
+    private Factory $view;
+    private string $csrfToken;
+    private bool $considerRequest = false;
+    private Session $session;
+    private mixed $model;
+    private array $labels = [];
+    private Request $request;
+    private array $reserved = ['method', 'url', 'route', 'action', 'files'];
+    private array $spoofedMethods = ['DELETE', 'PATCH', 'PUT'];
+    private array $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
+    private string|null $type = null;
 
-    /**
-     * The HTML builder instance.
-     *
-     * @var \NZTim\Html\HtmlBuilder
-     */
-    protected $html;
-
-    /**
-     * The URL generator instance.
-     *
-     * @var \Illuminate\Contracts\Routing\UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * The View factory instance.
-     *
-     * @var \Illuminate\Contracts\View\Factory
-     */
-    protected $view;
-
-    /**
-     * The CSRF token used by the form builder.
-     *
-     * @var string
-     */
-    protected $csrfToken;
-
-    /**
-     * Consider Request variables while auto fill.
-     * @var bool
-     */
-    protected $considerRequest = false;
-
-    /**
-     * The session store implementation.
-     *
-     * @var \Illuminate\Contracts\Session\Session
-     */
-    protected $session;
-
-    /**
-     * The current model instance for the form.
-     *
-     * @var mixed
-     */
-    protected $model;
-
-    /**
-     * An array of label names we've created.
-     *
-     * @var array
-     */
-    protected $labels = [];
-
-    protected $request;
-
-    /**
-     * The reserved form open attributes.
-     *
-     * @var array
-     */
-    protected $reserved = ['method', 'url', 'route', 'action', 'files'];
-
-    /**
-     * The form methods that should be spoofed, in uppercase.
-     *
-     * @var array
-     */
-    protected $spoofedMethods = ['DELETE', 'PATCH', 'PUT'];
-
-    /**
-     * The types of inputs to not fill values on by default.
-     *
-     * @var array
-     */
-    protected $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
-
-
-    /**
-     * Input Type.
-     *
-     * @var null
-     */
-    protected $type = null;
-
-    /**
-     * Create a new form builder instance.
-     *
-     * @param  \NZTim\Html\HtmlBuilder               $html
-     * @param  \Illuminate\Contracts\Routing\UrlGenerator $url
-     * @param  \Illuminate\Contracts\View\Factory         $view
-     * @param  string                                     $csrfToken
-     * @param  Request                                    $request
-     */
-    public function __construct(HtmlBuilder $html, UrlGenerator $url, Factory $view, $csrfToken, Request $request = null)
+    public function __construct(UrlGenerator $url, Factory $view, Session $session, Request $request = null)
     {
         $this->url = $url;
-        $this->html = $html;
         $this->view = $view;
-        $this->csrfToken = $csrfToken;
+        $this->session = $session;
+        $this->csrfToken = $session->token();
         $this->request = $request;
     }
 
-    /**
-     * Open up a new HTML form.
-     *
-     * @param  array $options
-     *
-     * @return \Illuminate\Support\HtmlString
-     */
-    public function open(array $options = [])
+    public function open(array $options = []): HtmlString
     {
         $method = Arr::get($options, 'method', 'post');
 
@@ -166,123 +70,58 @@ class FormBuilder
         // Finally, we will concatenate all of the attributes into a single string so
         // we can build out the final form open statement. We'll also append on an
         // extra value for the hidden _method field if it's needed for the form.
-        $attributes = $this->html->attributes($attributes);
+        $attributes = $this->attributes($attributes);
 
         return $this->toHtmlString('<form' . $attributes . '>' . $append);
     }
 
-    /**
-     * Create a new model based form builder.
-     *
-     * @param  mixed $model
-     * @param  array $options
-     *
-     * @return \Illuminate\Support\HtmlString
-     */
-    public function model($model, array $options = [])
+    public function model(mixed $model, array $options = []): HtmlString
     {
         $this->model = $model;
 
         return $this->open($options);
     }
 
-    /**
-     * Set the model instance on the form builder.
-     *
-     * @param  mixed $model
-     *
-     * @return void
-     */
-    public function setModel($model)
+    public function setModel(mixed $model): void
     {
         $this->model = $model;
     }
 
-    /**
-     * Get the current model instance on the form builder.
-     *
-     * @return mixed $model
-     */
-    public function getModel()
+    public function getModel(): mixed
     {
         return $this->model;
     }
 
-    /**
-     * Close the current form.
-     *
-     * @return string
-     */
-    public function close()
+    public function close(): HtmlString
     {
         $this->labels = [];
-
         $this->model = null;
-
         return $this->toHtmlString('</form>');
     }
 
-    /**
-     * Generate a hidden field with the current CSRF token.
-     *
-     * @return string
-     */
-    public function token()
+    public function token(): HtmlString
     {
         $token = ! empty($this->csrfToken) ? $this->csrfToken : $this->session->token();
-
         return $this->hidden('_token', $token);
     }
 
-    /**
-     * Create a form label element.
-     *
-     * @param  string $name
-     * @param  string $value
-     * @param  array  $options
-     * @param  bool   $escape_html
-     *
-     * @return \Illuminate\Support\HtmlString
-     */
-    public function label($name, $value = null, $options = [], $escape_html = true)
+    public function label(string $name, string $value = null, array $options = [], bool $escape_html = true): HtmlString
     {
         $this->labels[] = $name;
-
-        $options = $this->html->attributes($options);
-
+        $options = $this->attributes($options);
         $value = $this->formatLabel($name, $value);
-
         if ($escape_html) {
-            $value = $this->html->entities($value);
+            $value = $this->entities($value);
         }
-
         return $this->toHtmlString('<label for="' . $name . '"' . $options . '>' . $value . '</label>');
     }
 
-    /**
-     * Format the label value.
-     *
-     * @param  string      $name
-     * @param  string|null $value
-     *
-     * @return string
-     */
-    protected function formatLabel($name, $value)
+    protected function formatLabel(string $name, string|null $value): string
     {
         return $value ?: ucwords(str_replace('_', ' ', $name));
     }
 
-    /**
-     * Create a form input field.
-     *
-     * @param  string $type
-     * @param  string $name
-     * @param  string $value
-     * @param  array  $options
-     *
-     * @return \Illuminate\Support\HtmlString
-     */
-    public function input($type, $name, $value = null, $options = [])
+    public function input(string $type, string $name, string $value = null, array $options = []): HtmlString
     {
         $this->type = $type;
 
@@ -306,7 +145,7 @@ class FormBuilder
 
         $options = array_merge($options, $merge);
 
-        return $this->toHtmlString('<input' . $this->html->attributes($options) . '>');
+        return $this->toHtmlString('<input' . $this->attributes($options) . '>');
     }
 
     /**
@@ -568,7 +407,7 @@ class FormBuilder
         // Next we will convert the attributes into a string form. Also we have removed
         // the size attribute, as it was merely a short-cut for the rows and cols on
         // the element. Then we'll create the final textarea elements HTML for us.
-        $options = $this->html->attributes($options);
+        $options = $this->attributes($options);
 
         return $this->toHtmlString('<textarea' . $options . '>' . e($value, false). '</textarea>');
     }
@@ -662,7 +501,7 @@ class FormBuilder
         // Once we have all of this HTML, we can join this into a single element after
         // formatting the attributes into an HTML "attributes" string, then we will
         // build out a final select statement, which will contain all the values.
-        $selectAttributes = $this->html->attributes($selectAttributes);
+        $selectAttributes = $this->attributes($selectAttributes);
 
         $list = implode('', $html);
 
@@ -768,7 +607,7 @@ class FormBuilder
                 $html[] = $this->option($space.$display, $value, $selected, $optionAttributes);
             }
         }
-        return $this->toHtmlString('<optgroup label="' . e($space.$label, false) . '"' . $this->html->attributes($attributes) . '>' . implode('', $html) . '</optgroup>');
+        return $this->toHtmlString('<optgroup label="' . e($space.$label, false) . '"' . $this->attributes($attributes) . '>' . implode('', $html) . '</optgroup>');
     }
 
     /**
@@ -787,7 +626,7 @@ class FormBuilder
 
         $options = array_merge(['value' => $value, 'selected' => $selected], $attributes);
 
-        $string = '<option' . $this->html->attributes($options) . '>';
+        $string = '<option' . $this->attributes($options) . '>';
         if ($display !== null) {
             $string .= e($display, false) . '</option>';
         }
@@ -812,7 +651,7 @@ class FormBuilder
             'value' => '',
         ];
 
-        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . e($display, false) . '</option>');
+        return $this->toHtmlString('<option' . $this->attributes($options) . '>' . e($display, false) . '</option>');
     }
 
     /**
@@ -1084,7 +923,7 @@ class FormBuilder
             $options['type'] = 'button';
         }
 
-        return $this->toHtmlString('<button' . $this->html->attributes($options) . '>' . $value . '</button>');
+        return $this->toHtmlString('<button' . $this->attributes($options) . '>' . $value . '</button>');
     }
 
     /**
@@ -1113,7 +952,7 @@ class FormBuilder
             }
         }
 
-        $attributes = $this->html->attributes($attributes);
+        $attributes = $this->attributes($attributes);
 
         $list = implode('', $html);
 
@@ -1435,50 +1274,45 @@ class FormBuilder
         return new HtmlString($html);
     }
 
-    /**
-     * Get the session store implementation.
-     *
-     * @return  \Illuminate\Contracts\Session\Session  $session
-     */
-    public function getSessionStore()
+    private function entities(string $value): string
     {
-        return $this->session;
+        return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
-    /**
-     * Set the session store implementation.
-     *
-     * @param  \Illuminate\Contracts\Session\Session $session
-     *
-     * @return $this
-     */
-    public function setSessionStore(Session $session)
+    public function attributes(array $attributes): string
     {
-        $this->session = $session;
-
-        return $this;
+        $html = [];
+        foreach ((array) $attributes as $key => $value) {
+            $element = $this->attributeElement($key, $value);
+            if (! is_null($element)) {
+                $html[] = $element;
+            }
+        }
+        return count($html) > 0 ? ' ' . implode(' ', $html) : '';
     }
 
-    /**
-     * Dynamically handle calls to the class.
-     *
-     * @param  string $method
-     * @param  array  $parameters
-     *
-     * @return \Illuminate\Contracts\View\View|mixed
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $parameters)
+    protected function attributeElement(string $key, string $value): string
     {
-        if (static::hasComponent($method)) {
-            return $this->componentCall($method, $parameters);
+        // For numeric keys we will assume that the value is a boolean attribute
+        // where the presence of the attribute represents a true value and the
+        // absence represents a false value.
+        // This will convert HTML attributes such as "required" to a correct
+        // form instead of using incorrect numerics.
+        if (is_numeric($key)) {
+            return $value;
         }
 
-        if (static::hasMacro($method)) {
-            return $this->macroCall($method, $parameters);
+        // Treat boolean attributes as HTML properties
+        if (is_bool($value) && $key !== 'value') {
+            return $value ? $key : '';
         }
 
-        throw new BadMethodCallException("Method {$method} does not exist.");
+        if (is_array($value) && $key === 'class') {
+            return 'class="' . implode(' ', $value) . '"';
+        }
+
+        if (! is_null($value)) {
+            return $key . '="' . e($value, false) . '"';
+        }
     }
 }
