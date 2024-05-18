@@ -29,6 +29,7 @@ class FormBuilder
         $this->url = $url;
         $this->view = $view;
         $this->session = $session;
+        $this->model = null;
         $this->request = $request;
     }
 
@@ -51,7 +52,6 @@ class FormBuilder
     public function model(mixed $model, array $options = []): HtmlString
     {
         $this->model = $model;
-
         return $this->open($options);
     }
 
@@ -78,7 +78,7 @@ class FormBuilder
         return $value ?: ucwords(str_replace('_', ' ', $name));
     }
 
-    public function input(string $type, string $name, string $value = null, array $options = []): HtmlString
+    public function input(string $type, ?string $name, string $value = null, array $options = []): HtmlString
     {
         $this->type = $type;
 
@@ -475,6 +475,7 @@ class FormBuilder
      * @param  array  $options
      *
      * @return \Illuminate\Support\HtmlString
+     * @deprecated
      */
     public function selectRange($name, $begin, $end, $selected = null, $options = [])
     {
@@ -484,6 +485,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a select year field.
      *
      * @param  string $name
@@ -500,6 +502,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a select month field.
      *
      * @param  string $name
@@ -531,7 +534,7 @@ class FormBuilder
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function getSelectOption($display, $value, $selected, array $attributes = [], array $optgroupAttributes = [])
+    private function getSelectOption($display, $value, $selected, array $attributes = [], array $optgroupAttributes = [])
     {
         if (is_iterable($display)) {
             return $this->optionGroup($display, $value, $selected, $optgroupAttributes, $attributes);
@@ -762,7 +765,6 @@ class FormBuilder
         if ($this->missingOldAndModel($name) && !$request) {
             return $checked;
         }
-
         return $this->compareValues($name, $value);
     }
 
@@ -793,6 +795,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a HTML reset input element.
      *
      * @param  string $value
@@ -802,10 +805,11 @@ class FormBuilder
      */
     public function reset($value, $attributes = [])
     {
-        return $this->input('reset', null, $value, $attributes);
+        return $this->input('reset', '', $value, $attributes);
     }
 
     /**
+     * @deprecated
      * Create a HTML image input element.
      *
      * @param  string $url
@@ -817,7 +821,6 @@ class FormBuilder
     public function image($url, $name = null, $attributes = [])
     {
         $attributes['src'] = $this->url->asset($url);
-
         return $this->input('image', $name, null, $attributes);
     }
 
@@ -867,6 +870,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a button element.
      *
      * @param  string $value
@@ -879,7 +883,6 @@ class FormBuilder
         if (! array_key_exists('type', $options)) {
             $options['type'] = 'button';
         }
-
         return $this->toHtmlString('<button' . $this->attributesToHtml($options) . '>' . $value . '</button>');
     }
 
@@ -1033,7 +1036,7 @@ class FormBuilder
      *
      * @return string
      */
-    public function getIdAttribute($name, $attributes)
+    private function getIdAttribute($name, $attributes)
     {
         if (array_key_exists('id', $attributes)) {
             return $attributes['id'];
@@ -1052,7 +1055,7 @@ class FormBuilder
      *
      * @return mixed
      */
-    public function getValueAttribute($name, $value = null)
+    private function getValueAttribute($name, $value = null)
     {
         if (is_null($name)) {
             return $value;
