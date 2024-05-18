@@ -22,7 +22,6 @@ class FormBuilder
     private array $labels = [];
     private Request $request;
     private array $reserved = ['method', 'url', 'route', 'action', 'files'];
-    private array $spoofedMethods = ['DELETE', 'PATCH', 'PUT'];
     private array $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
     private string|null $type = null;
 
@@ -50,8 +49,7 @@ class FormBuilder
         // If the method is PUT, PATCH or DELETE we will need to add a spoofer hidden
         // field that will instruct the Symfony request to pretend the method is a
         // different method than it actually is, for convenience from the forms.
-        $append = $this->getAppendage($method);
-
+        $append = strtoupper($method) === 'GET' ? '' : csrf_field();
         if (isset($options['files']) && $options['files']) {
             $options['enctype'] = 'multipart/form-data';
         }
@@ -80,26 +78,11 @@ class FormBuilder
         return $this->open($options);
     }
 
-    public function setModel(mixed $model): void
-    {
-        $this->model = $model;
-    }
-
-    public function getModel(): mixed
-    {
-        return $this->model;
-    }
-
     public function close(): HtmlString
     {
         $this->labels = [];
         $this->model = null;
         return $this->toHtmlString('</form>');
-    }
-
-    public function token(): HtmlString
-    {
-        return csrf_field();
     }
 
     public function label(string $name, string $value = null, array $options = [], bool $escape_html = true): HtmlString
@@ -1063,33 +1046,6 @@ class FormBuilder
         }
 
         return $this->url->action($options);
-    }
-
-    /**
-     * Get the form appendage for the given method.
-     *
-     * @param  string $method
-     *
-     * @return string
-     */
-    protected function getAppendage(string $method): string
-    {
-        list($method, $appendage) = [strtoupper($method), ''];
-        // If the HTTP method is in this list of spoofed methods, we will attach the
-        // method spoofer hidden input to the form. This allows us to use regular
-        // form to initiate PUT and DELETE requests in addition to the typical.
-        if (in_array($method, $this->spoofedMethods)) {
-            $appendage .= $this->hidden('_method', $method);
-        }
-
-        // If the method is something other than GET we will go ahead and attach the
-        // CSRF token to the form, as this can't hurt and is convenient to simply
-        // always have available on every form the developers creates for them.
-        if ($method !== 'GET') {
-            $appendage .= $this->token();
-        }
-
-        return $appendage;
     }
 
     /**
