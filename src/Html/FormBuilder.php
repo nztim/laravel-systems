@@ -21,7 +21,6 @@ class FormBuilder
     private mixed $model;
     private array $labels = [];
     private Request $request;
-    private array $reserved = ['method', 'url', 'route', 'action', 'files'];
     private array $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
     private string|null $type = null;
 
@@ -35,39 +34,17 @@ class FormBuilder
 
     public function open(array $options = []): HtmlString
     {
-        $method = Arr::get($options, 'method', 'post');
-
-        // We need to extract the proper method from the attributes. If the method is
-        // something other than GET or POST we'll use POST since we will spoof the
-        // actual method since forms don't support the reserved methods in HTML.
-        $attributes['method'] = $this->getMethod($method);
-
+        $method = strtolower(Arr::get($options, 'method', 'post'));
+        $attributes['method'] = ($method === 'post') ? $method : 'get';
         $attributes['action'] = $this->getAction($options);
-
         $attributes['accept-charset'] = 'UTF-8';
-
-        // If the method is PUT, PATCH or DELETE we will need to add a spoofer hidden
-        // field that will instruct the Symfony request to pretend the method is a
-        // different method than it actually is, for convenience from the forms.
-        $append = strtoupper($method) === 'GET' ? '' : csrf_field();
-        if (isset($options['files']) && $options['files']) {
+        $append = $attributes['method'] === 'get' ? '' : csrf_field();
+        $files = Arr::get($options, 'files', false);
+        if ($files) {
             $options['enctype'] = 'multipart/form-data';
         }
-
-        // Finally we're ready to create the final form HTML field. We will attribute
-        // format the array of attributes. We will also add on the appendage which
-        // is used to spoof requests for this PUT, PATCH, etc. methods on forms.
-        $attributes = array_merge(
-
-          $attributes, Arr::except($options, $this->reserved)
-
-        );
-
-        // Finally, we will concatenate all of the attributes into a single string so
-        // we can build out the final form open statement. We'll also append on an
-        // extra value for the hidden _method field if it's needed for the form.
-        $attributes = $this->attributes($attributes);
-
+        $attributes = array_merge($attributes, Arr::except($options, ['method', 'url', 'route', 'action', 'files']));
+        $attributes = $this->attributesToHtml($attributes);
         return $this->toHtmlString('<form' . $attributes . '>' . $append);
     }
 
@@ -88,7 +65,7 @@ class FormBuilder
     public function label(string $name, string $value = null, array $options = [], bool $escape_html = true): HtmlString
     {
         $this->labels[] = $name;
-        $options = $this->attributes($options);
+        $options = $this->attributesToHtml($options);
         $value = $this->formatLabel($name, $value);
         if ($escape_html) {
             $value = $this->entities($value);
@@ -125,7 +102,7 @@ class FormBuilder
 
         $options = array_merge($options, $merge);
 
-        return $this->toHtmlString('<input' . $this->attributes($options) . '>');
+        return $this->toHtmlString('<input' . $this->attributesToHtml($options) . '>');
     }
 
     /**
@@ -387,7 +364,7 @@ class FormBuilder
         // Next we will convert the attributes into a string form. Also we have removed
         // the size attribute, as it was merely a short-cut for the rows and cols on
         // the element. Then we'll create the final textarea elements HTML for us.
-        $options = $this->attributes($options);
+        $options = $this->attributesToHtml($options);
 
         return $this->toHtmlString('<textarea' . $options . '>' . e($value, false). '</textarea>');
     }
@@ -481,7 +458,7 @@ class FormBuilder
         // Once we have all of this HTML, we can join this into a single element after
         // formatting the attributes into an HTML "attributes" string, then we will
         // build out a final select statement, which will contain all the values.
-        $selectAttributes = $this->attributes($selectAttributes);
+        $selectAttributes = $this->attributesToHtml($selectAttributes);
 
         $list = implode('', $html);
 
@@ -587,7 +564,7 @@ class FormBuilder
                 $html[] = $this->option($space.$display, $value, $selected, $optionAttributes);
             }
         }
-        return $this->toHtmlString('<optgroup label="' . e($space.$label, false) . '"' . $this->attributes($attributes) . '>' . implode('', $html) . '</optgroup>');
+        return $this->toHtmlString('<optgroup label="' . e($space.$label, false) . '"' . $this->attributesToHtml($attributes) . '>' . implode('', $html) . '</optgroup>');
     }
 
     /**
@@ -606,7 +583,7 @@ class FormBuilder
 
         $options = array_merge(['value' => $value, 'selected' => $selected], $attributes);
 
-        $string = '<option' . $this->attributes($options) . '>';
+        $string = '<option' . $this->attributesToHtml($options) . '>';
         if ($display !== null) {
             $string .= e($display, false) . '</option>';
         }
@@ -631,7 +608,7 @@ class FormBuilder
             'value' => '',
         ];
 
-        return $this->toHtmlString('<option' . $this->attributes($options) . '>' . e($display, false) . '</option>');
+        return $this->toHtmlString('<option' . $this->attributesToHtml($options) . '>' . e($display, false) . '</option>');
     }
 
     /**
@@ -903,7 +880,7 @@ class FormBuilder
             $options['type'] = 'button';
         }
 
-        return $this->toHtmlString('<button' . $this->attributes($options) . '>' . $value . '</button>');
+        return $this->toHtmlString('<button' . $this->attributesToHtml($options) . '>' . $value . '</button>');
     }
 
     /**
@@ -932,7 +909,7 @@ class FormBuilder
             }
         }
 
-        $attributes = $this->attributes($attributes);
+        $attributes = $this->attributesToHtml($attributes);
 
         $list = implode('', $html);
 
@@ -1231,10 +1208,10 @@ class FormBuilder
         return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
-    public function attributes(array $attributes): string
+    public function attributesToHtml(array $attributes): string
     {
         $html = [];
-        foreach ((array) $attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $element = $this->attributeElement($key, $value);
             if (! is_null($element)) {
                 $html[] = $element;
