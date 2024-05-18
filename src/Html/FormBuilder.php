@@ -16,7 +16,6 @@ class FormBuilder
 {
     private UrlGenerator $url;
     private Factory $view;
-    private string $csrfToken;
     private bool $considerRequest = false;
     private Session $session;
     private mixed $model;
@@ -32,7 +31,6 @@ class FormBuilder
         $this->url = $url;
         $this->view = $view;
         $this->session = $session;
-        $this->csrfToken = $session->token();
         $this->request = $request;
     }
 
@@ -101,8 +99,7 @@ class FormBuilder
 
     public function token(): HtmlString
     {
-        $token = ! empty($this->csrfToken) ? $this->csrfToken : $this->session->token();
-        return $this->hidden('_token', $token);
+        return csrf_field();
     }
 
     public function label(string $name, string $value = null, array $options = [], bool $escape_html = true): HtmlString
@@ -1075,10 +1072,9 @@ class FormBuilder
      *
      * @return string
      */
-    protected function getAppendage($method)
+    protected function getAppendage(string $method): string
     {
         list($method, $appendage) = [strtoupper($method), ''];
-
         // If the HTTP method is in this list of spoofed methods, we will attach the
         // method spoofer hidden input to the form. This allows us to use regular
         // form to initiate PUT and DELETE requests in addition to the typical.
@@ -1291,7 +1287,7 @@ class FormBuilder
         return count($html) > 0 ? ' ' . implode(' ', $html) : '';
     }
 
-    protected function attributeElement(string $key, string $value): string
+    protected function attributeElement($key, $value)
     {
         // For numeric keys we will assume that the value is a boolean attribute
         // where the presence of the attribute represents a true value and the
