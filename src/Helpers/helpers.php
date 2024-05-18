@@ -1,6 +1,6 @@
 <?php
 
-use Collective\Html\FormBuilder;
+use NZTim\Html\FormBuilder;
 use Illuminate\Database\Schema\Builder;
 
 function flash($message, $type = 'danger')

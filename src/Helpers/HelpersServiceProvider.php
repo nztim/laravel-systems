@@ -1,6 +1,5 @@
 <?php namespace NZTim\Helpers;
 
-use Collective\Html\HtmlServiceProvider;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Http\UploadedFile;
@@ -19,7 +18,6 @@ class HelpersServiceProvider extends ServiceProvider
             $faker->addProvider(new FakerSafeEmailProvider($faker));
             return $faker;
         });
-        $this->app->register(HtmlServiceProvider::class);
     }
 
     public function boot()
