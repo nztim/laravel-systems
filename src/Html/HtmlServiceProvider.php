@@ -9,13 +9,13 @@ class HtmlServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     public function register()
     {
-        $this->app->singleton('form', function ($app) {
+        $this->app->singleton(FormBuilder::class, function ($app) {
             return new FormBuilder($app['url'], $app['view'], $app['session.store'], $app['request']);
         });
     }
 
     public function provides()
     {
-        return ['form', FormBuilder::class];
+        return [FormBuilder::class];
     }
 }

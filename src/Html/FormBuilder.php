@@ -188,6 +188,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a tel input field.
      *
      * @param  string $name
@@ -302,6 +303,7 @@ class FormBuilder
     }
 
     /**
+     * @deprecated
      * Create a week input field.
      *
      * @param  string $name
@@ -1110,7 +1112,7 @@ class FormBuilder
      *
      * @return mixed
      */
-    public function old($name)
+    private function old($name)
     {
         if (isset($this->session)) {
             $key = $this->transformKey($name);
@@ -1140,7 +1142,7 @@ class FormBuilder
      *
      * @return bool
      */
-    public function oldInputIsEmpty()
+    private function oldInputIsEmpty()
     {
         return (isset($this->session) && count((array) $this->session->getOldInput()) === 0);
     }
@@ -1174,7 +1176,7 @@ class FormBuilder
         return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
-    public function attributesToHtml(array $attributes): string
+    private function attributesToHtml(array $attributes): string
     {
         $html = [];
         foreach ($attributes as $key => $value) {
