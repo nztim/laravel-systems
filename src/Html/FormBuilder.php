@@ -16,7 +16,6 @@ class FormBuilder
 {
     private UrlGenerator $url;
     private Factory $view;
-    private bool $considerRequest = false;
     private Session $session;
     private mixed $model;
     private array $labels = [];
@@ -728,13 +727,11 @@ class FormBuilder
      */
     protected function getCheckboxCheckedState($name, $value, $checked)
     {
-        $request = $this->request($name);
-
-        if (isset($this->session) && ! $this->oldInputIsEmpty() && is_null($this->old($name)) && !$request) {
+        if (isset($this->session) && ! $this->oldInputIsEmpty() && is_null($this->old($name))) {
             return false;
         }
 
-        if ($this->missingOldAndModel($name) && is_null($request)) {
+        if ($this->missingOldAndModel($name)) {
             return $checked;
         }
 
@@ -760,9 +757,7 @@ class FormBuilder
      */
     protected function getRadioCheckedState($name, $value, $checked)
     {
-        $request = $this->request($name);
-
-        if ($this->missingOldAndModel($name) && !$request) {
+        if ($this->missingOldAndModel($name)) {
             return $checked;
         }
         return $this->compareValues($name, $value);
@@ -1081,11 +1076,6 @@ class FormBuilder
             }
         }
 
-        $request = $this->request($name);
-        if (! is_null($request) && $name != '_method') {
-            return $request;
-        }
-
         if (! is_null($value)) {
             return $value;
         }
@@ -1093,33 +1083,6 @@ class FormBuilder
         if (isset($this->model)) {
             return $this->getModelValueAttribute($name);
         }
-    }
-
-    /**
-     * Take Request in fill process
-     * @param bool $consider
-     */
-    public function considerRequest($consider = true)
-    {
-        $this->considerRequest = $consider;
-    }
-
-    /**
-     * Get value from current Request
-     * @param $name
-     * @return array|null|string
-     */
-    protected function request($name)
-    {
-        if (!$this->considerRequest) {
-            return null;
-        }
-
-        if (!isset($this->request)) {
-            return null;
-        }
-
-        return $this->request->input($this->transformKey($name));
     }
 
     /**
