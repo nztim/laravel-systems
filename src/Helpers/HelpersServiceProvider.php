@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory as LaravelValidator;
 use Illuminate\Validation\Validator;
 use Illuminate\View\Compilers\BladeCompiler;
+use NZTim\Html\HtmlServiceProvider;
 
 class HelpersServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,8 @@ class HelpersServiceProvider extends ServiceProvider
             $faker->addProvider(new FakerSafeEmailProvider($faker));
             return $faker;
         });
+        $this->app->register(HtmlServiceProvider::class);
+
     }
 
     public function boot()
