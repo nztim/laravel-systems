@@ -7,7 +7,6 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
@@ -19,31 +18,31 @@ class FormBuilder
     private Session $session;
     private mixed $model;
     private array $labels = [];
-    private Request $request;
     private array $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
     private string|null $type = null;
 
-    public function __construct(UrlGenerator $url, Factory $view, Session $session, Request $request = null)
+    public function __construct(UrlGenerator $url, Factory $view, Session $session)
     {
         $this->url = $url;
         $this->view = $view;
         $this->session = $session;
         $this->model = null;
-        $this->request = $request;
     }
 
     public function open(array $options = []): HtmlString
     {
-        $method = strtolower(Arr::get($options, 'method', 'post'));
-        $attributes['method'] = ($method === 'post') ? $method : 'get';
+        $attributes['method'] = 'get';
+        $append = '';
+        if (strtolower(array_get($options, 'method', 'post')) === 'post') {
+            $attributes['method'] = 'post';
+            $append = csrf_field();
+        }
         $attributes['action'] = $this->getAction($options);
         $attributes['accept-charset'] = 'UTF-8';
-        $append = $attributes['method'] === 'get' ? '' : csrf_field();
-        $files = Arr::get($options, 'files', false);
-        if ($files) {
+        if (array_get($options, 'files', false)) {
             $options['enctype'] = 'multipart/form-data';
         }
-        $attributes = array_merge($attributes, Arr::except($options, ['method', 'url', 'route', 'action', 'files']));
+        $attributes = array_merge($attributes, array_except($options, ['method', 'url', 'route', 'action', 'files']));
         $attributes = $this->attributesToHtml($attributes);
         return $this->toHtmlString('<form' . $attributes . '>' . $append);
     }
