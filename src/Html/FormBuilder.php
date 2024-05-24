@@ -58,6 +58,7 @@ class FormBuilder
     {
         $this->labels = [];
         $this->model = null;
+        $this->payload = [];
         return $this->toHtmlString('</form>');
     }
 
