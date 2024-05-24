@@ -20,6 +20,7 @@ class FormBuilder
     private array $labels = [];
     private array $skipValueTypes = ['file', 'password', 'checkbox', 'radio'];
     private string|null $type = null;
+    private array $payload = [];
 
     public function __construct(UrlGenerator $url, Factory $view, Session $session)
     {
@@ -1106,34 +1107,27 @@ class FormBuilder
 
     /**
      * Get a value from the session's old input.
-     *
+     * This function keeps state in $this->payload so it can shift off multiple elements one after the other
      * @param  string $name
-     *
-     * @return mixed
      */
     private function old($name)
     {
-        if (isset($this->session)) {
-            $key = $this->transformKey($name);
-            $payload = $this->session->getOldInput($key);
-
-            if (!is_array($payload)) {
-                return $payload;
-            }
-
-            if (!in_array($this->type, ['select', 'checkbox'])) {
-                if (!isset($this->payload[$key])) {
-                    $this->payload[$key] = collect($payload);
-                }
-
-                if (!empty($this->payload[$key])) {
-                    $value = $this->payload[$key]->shift();
-                    return $value;
-                }
-            }
-
+        $key = $this->transformKey($name);
+        $payload = $this->session->getOldInput($key);
+        if (!is_array($payload)) {
             return $payload;
         }
+        if (!in_array($this->type, ['select', 'checkbox'])) {
+            // If nothing already set then store the collection of old input
+            if (!isset($this->payload[$key])) {
+                $this->payload[$key] = collect($payload);
+            }
+            // Empty out the old input collection one by one
+            if (!empty($this->payload[$key])) {
+                return $this->payload[$key]->shift();
+            }
+        }
+        return $payload;
     }
 
     /**
