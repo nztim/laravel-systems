@@ -5,10 +5,11 @@ Package combining a number of existing projects for easy installation and mainte
 ### Compatiblity
 
 | Version | PHP  | Laravel |
-| ------- |------| ------- |
+|---------|------|---------|
 | 1.0     | ^8.0 | 8.0     |
 | 2.0     | ^8.0 | 9.0     |
 | 3.0     | ^8.1 | 10.0    |
+| 5.0     | ^8.2 | 11.0    |
 
 ### Installation
 

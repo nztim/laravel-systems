@@ -8,7 +8,7 @@
         "erusev/parsedown-extra": "^0.8.1",
         "guzzlehttp/guzzle": "^7.0",
         "laminas/laminas-hydrator": "^4.0",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "^10.0|^11.0",
         "league/glide": "^2.0",
         "league/glide-symfony": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0",
