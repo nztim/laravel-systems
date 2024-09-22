@@ -82,6 +82,7 @@ class HelpersServiceProvider extends ServiceProvider
 
         $this->commands([
             EnvCheckCommand::class,
+            ServerCheckCommand::class,
         ]);
     }
 }

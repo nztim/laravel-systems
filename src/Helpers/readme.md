@@ -38,6 +38,12 @@ Add this before the Laravel rewrite rule
 ### Envcheck command
 Add `php artisan envcheck` to your deploy process to enable a comparison check between `.env` and `.env.example`
 
+### ServerCheck command
+Store copies of your server configuration files (e.g. FPM pool config) in `resources/server-conf`.
+Add `resources/server-conf/files.php`, which returns an array of filenames and server paths. 
+Run `php artisan server-conf-check` to compare the project files and the files on the server.
+Add the command to your deploy process to make sure the server is configured in accordance with the project records.
+
 ### Local configuration (.env replacement)
 To use this functionality add this method override to your HTTP and Console Kernel classes:
 
