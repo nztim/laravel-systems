@@ -20,7 +20,6 @@ class HelpersServiceProvider extends ServiceProvider
             return $faker;
         });
         $this->app->register(HtmlServiceProvider::class);
-
     }
 
     public function boot()
