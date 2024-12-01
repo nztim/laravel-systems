@@ -90,7 +90,7 @@ class QueuedJob
         if (is_null($this->completed)) {
             return 0;
         }
-        return $this->completed->diffInSeconds($this->created);
+        return $this->completed->diffInSeconds($this->created, true);
     }
 
     public function created(): Carbon
