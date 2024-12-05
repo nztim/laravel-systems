@@ -32,6 +32,7 @@ Then `composer require nztim/laravel-systems`
 NZTim\CommandBus\Laravel\CommandBusServiceProvider::class,
 NZTim\Helpers\HelpersServiceProvider::class,
 NZTim\Glide\GlideServiceProvider::class,
+NZTim\Ipbl\IpblServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
@@ -47,7 +48,9 @@ php artisan vendor:publish --provider=NZTim\CommandBus\Laravel\CommandBusService
 php artisan vendor:publish --provider=NZTim\Logger\LoggerServiceProvider
 php artisan vendor:publish --provider=NZTim\SES\SesServiceProvider
 
-php artisan qm:migration && php artisan migrate # Add tables for queue and maillog
+php artisan ipbl:migration
+php artisan qm:migration
+php artisan migrate
 
 # commandbus.php
 'middleware' => [
@@ -90,8 +93,9 @@ LOGGER_EMAIL_RECIPIENT=dev@example.org
 ##### Scheduler entries
 
 ```php 
-$schedule->command('qm:daemon 50')     ->everyMinute();
-$schedule->command('qm:logstatus')     ->dailyAt('4:00');
+$schedule->command('qm:daemon 50')              ->everyMinute();
+$schedule->command('qm:logstatus')              ->dailyAt('4:00');
+$schedule->command(IpblDailyCommand::class)     ->dailyAt('4:05');
 ```
 
 ##### Readme files
@@ -100,6 +104,7 @@ $schedule->command('qm:logstatus')     ->dailyAt('4:00');
 - [nztim/glide](/src/Glide/readme.md)
 - [nztim/helpers](/src/Helpers/readme.md)
 - [nztim/input](/src/Input/readme.md)
+- [nztim/ipbl](/src/Ipbl/readme.md)
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
