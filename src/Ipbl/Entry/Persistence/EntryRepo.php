@@ -62,7 +62,7 @@ class EntryRepo
         return $this->findById($id);
     }
 
-    public function expireOld(int $days = 30): void
+    public function expireOld(int $days = 180): void
     {
         $this->db->table($this->table)
             ->where('updated', '<', now()->subDays($days))
