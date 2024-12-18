@@ -29,7 +29,7 @@ class Ipbl
         log_info('ipbl', "{$ip} | {$entry->country} | {$severity} | {$reason} ");
     }
 
-    public function evaluate404(Request $request, int $severity = 2): void
+    public function evaluate404(Request $request, int $severity = 5): void
     {
         $path = $request->path();
         if ($this->badPath($path)) {
