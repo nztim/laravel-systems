@@ -80,6 +80,7 @@ class HelpersServiceProvider extends ServiceProvider
         // Commands -----------------------------------------------------------
 
         $this->commands([
+            DevHelperCommand::class,
             EnvCheckCommand::class,
             ServerCheckCommand::class,
         ]);
