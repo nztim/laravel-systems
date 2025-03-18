@@ -6,9 +6,16 @@ use ParsedownExtra;
 
 class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
 {
-    protected function inlineLink($excerpt)
+    private bool $jotformEnabled = true;
+
+    public function setJotformEnabled(bool $enabled)
     {
-        $inline = parent::inlineLink($excerpt);
+        $this->jotformEnabled = $enabled;
+    }
+
+    protected function inlineLink($Excerpt)
+    {
+        $inline = parent::inlineLink($Excerpt);
         return $this->handleLink($inline);
     }
 
@@ -37,9 +44,11 @@ class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
             return $this->embedYouTube($inline, $ytCode);
         }
         // JotForm handler
-        $jfCode = $this->parseJotForm($url);
-        if ($jfCode) {
-            return $this->embedJotForm($inline, $jfCode);
+        if ($this->jotformEnabled) {
+            $jfCode = $this->parseJotForm($url);
+            if ($jfCode) {
+                return $this->embedJotForm($inline, $jfCode);
+            }
         }
         // "target_blank" class handler
         $classes = explode(' ', $inline['element']['attributes']['class'] ?? '');
