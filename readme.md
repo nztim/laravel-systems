@@ -10,6 +10,7 @@ Package combining a number of existing projects for easy installation and mainte
 | 2.0     | ^8.0 | 9.0     |
 | 3.0     | ^8.1 | 10.0    |
 | 5.0     | ^8.2 | 11.0    |
+| 6.0     | ^8.2 | 12.0    |
 
 ### Installation
 

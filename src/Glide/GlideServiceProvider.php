@@ -4,7 +4,6 @@ namespace NZTim\Glide;
 
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider;
-use League\Glide\Responses\SymfonyResponseFactory;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
 
