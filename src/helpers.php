@@ -40,7 +40,7 @@ function markdown(string $content): string
 
 // SYMFONY MAILER FACTORY -----------------------------------------------------
 
-function getSymfonySmtpMailer(array $conf = null): Mailer
+function getSymfonySmtpMailer(array|null $conf = null): Mailer
 {
     if (is_null($conf)) {
         $conf = config('mail.mailers.' . config('mail.default'));
