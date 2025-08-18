@@ -7,7 +7,7 @@ class Lock
     public const STATUS_EXEC = 'executing';
     public const STATUS_PAUSED = 'paused';
 
-    public function __construct(string $lockfile = null)
+    public function __construct(string|null $lockfile = null)
     {
         $this->lockfile = is_null($lockfile) ? storage_path('app' . DIRECTORY_SEPARATOR . 'nztqueuemgr.lock') : $lockfile;
     }

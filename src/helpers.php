@@ -2,7 +2,6 @@
 
 use NZTim\Logger\Logger;
 use NZTim\Markdown\ParsedownExtraWithYouTubeEmbed;
-use NZTim\SimpleHttp\Http;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 
