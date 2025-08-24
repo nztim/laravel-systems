@@ -3,7 +3,7 @@
     "description": "Combined Laravel packages and helpers",
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "beberlei/assert": "^3.2",
         "erusev/parsedown-extra": "^0.8.1",
         "guzzlehttp/guzzle": "^7.0",

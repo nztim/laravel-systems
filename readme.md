@@ -11,6 +11,7 @@ Package combining a number of existing projects for easy installation and mainte
 | 3.0     | ^8.1 | 10.0    |
 | 5.0     | ^8.2 | 11.0    |
 | 6.0     | ^8.2 | 12.0    |
+| 7.0     | ^8.4 | 12.0    |
 
 ### Installation
 
@@ -123,3 +124,7 @@ $schedule->command(IpblDailyCommand::class)     ->dailyAt('4:05');
 * **2.8:** Add WhatIsMyIp
 * **2.2:** Add MailLog package. To activate, configure and register the service provider. Also fix PHP 8.1 deprecation notices.
 * **2.0:** No API changes, SMTP mail config in newer format is now required for Logger. `form()` and `schema()` helpers are now in this package so can be removed from the application.
+
+#TODO: 
+#   add note about Html, registered by HelpersServiceProvider so no need to worry about it. Will be absorbed by Helpers in time but L11 first.
+#   Html select() doesn't work with array input, all selected old inputs are selected on every input field. Don't use it for this.
