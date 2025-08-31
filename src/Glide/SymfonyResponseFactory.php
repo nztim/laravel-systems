@@ -11,7 +11,7 @@ class SymfonyResponseFactory implements ResponseFactoryInterface
 {
     protected Request|null $request;
 
-    public function __construct(Request $request = null)
+    public function __construct(Request|null $request = null)
     {
         $this->request = $request;
     }
