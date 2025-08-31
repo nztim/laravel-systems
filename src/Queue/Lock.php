@@ -4,8 +4,8 @@ class Lock
 {
     private string $lockfile;
 
-    public const STATUS_EXEC = 'executing';
-    public const STATUS_PAUSED = 'paused';
+    public const string STATUS_EXEC = 'executing';
+    public const string STATUS_PAUSED = 'paused';
 
     public function __construct(string|null $lockfile = null)
     {

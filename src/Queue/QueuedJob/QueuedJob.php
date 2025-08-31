@@ -15,7 +15,7 @@ class QueuedJob
     private Carbon $updated;
     private ?Carbon $completed;
 
-    private const DATE_FORMAT = 'Y-m-d H:i:s';
+    private const string DATE_FORMAT = 'Y-m-d H:i:s';
 
     private function __construct() {}
 

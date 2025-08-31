@@ -96,7 +96,7 @@ function route_force_host($name, $parameters = [])
  * @return  mixed           Returns YouTube Video ID, or (boolean) false.
  * @author  Stephan Schmitz <eyecatchup@gmail.com>
  */
-function parse_yturl($url): string
+function parse_yturl(string $url): string
 {
     $pattern = '#^(?:https?://|//)?(?:www\.|m\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))([\w-]{11})(?![\w-])#';
     preg_match($pattern, $url, $matches);

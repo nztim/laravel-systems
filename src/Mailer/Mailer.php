@@ -23,7 +23,7 @@ class Mailer
         $this->converter = $converter;
     }
 
-    public const ID_HEADER = 'X-Mailer2-ID';
+    public const string ID_HEADER = 'X-Mailer2-ID';
 
     public function send(AbstractMessage $message): ?MessageSent
     {

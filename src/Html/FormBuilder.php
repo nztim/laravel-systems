@@ -62,7 +62,7 @@ class FormBuilder
         return $this->toHtmlString('</form>');
     }
 
-    public function label(string $name, string $value = null, array $options = [], bool $escape_html = true): HtmlString
+    public function label(string $name, string|null $value = null, array $options = [], bool $escape_html = true): HtmlString
     {
         $this->labels[] = $name;
         $options = $this->attributesToHtml($options);
@@ -78,7 +78,7 @@ class FormBuilder
         return $value ?: ucwords(str_replace('_', ' ', $name));
     }
 
-    public function input(string $type, ?string $name, string $value = null, array $options = []): HtmlString
+    public function input(string $type, ?string $name, string|null $value = null, array $options = []): HtmlString
     {
         $this->type = $type;
 
@@ -514,14 +514,12 @@ class FormBuilder
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function selectMonth($name, $selected = null, $options = [], $format = '%B')
+    public function selectMonth($name, $selected = null, $options = [])
     {
         $months = [];
-
         foreach (range(1, 12) as $month) {
-            $months[$month] = strftime($format, mktime(0, 0, 0, $month, 1));
+            $months[$month] = date('F', mktime(0, 0, 0, $month, 1, 2000));
         }
-
         return $this->select($name, $months, $selected, $options);
     }
 

@@ -6,7 +6,7 @@ use Throwable;
 
 class Dump
 {
-    private $output;
+    private OutputStyle $output;
 
     public function __construct(OutputStyle $output)
     {

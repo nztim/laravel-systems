@@ -90,7 +90,7 @@ class QueueManager
 
     public function recent(int $days): Collection
     {
-        return $this->repo->recent(intval($days));
+        return $this->repo->recent($days);
     }
 
     public function allFailed(): Collection
