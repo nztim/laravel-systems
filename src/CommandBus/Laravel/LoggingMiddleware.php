@@ -2,7 +2,6 @@
 
 namespace NZTim\CommandBus\Laravel;
 
-use App\Models\User\AuthUser;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Foundation\Application;
 use NZTim\CommandBus\Middleware;
@@ -20,7 +19,6 @@ class LoggingMiddleware implements Middleware
 
     public function execute(object $command, callable $next)
     {
-        /** @var AuthUser $user */
         $user = $this->auth->guard()->user();
         $start = microtime(true);
         $response = $next($command);
