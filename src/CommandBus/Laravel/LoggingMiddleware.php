@@ -22,15 +22,16 @@ class LoggingMiddleware implements Middleware
     {
         /** @var AuthUser $user */
         $user = $this->auth->guard()->user();
-        $message = get_class($command) . ' | ';
+        $start = microtime(true);
+        $response = $next($command);
+        $seconds = number_format(microtime(true) - $start, 1);
+        $message = "{$seconds}s | " . get_class($command);
         if ($this->console) {
-            $message .= 'console';
-        } elseif ($user) {
-            $message .= $user->email . ' (id:' . $user->id . ')';
-        } else {
-            $message .= '(not logged in)';
+            $message .= ' | console';
+        }  elseif($user) {
+            $message .= ' | ' . $user->email . ' (id:' . $user->id . ')';
         }
         log_info('bus', $message);
-        return $next($command);
+        return $response;
     }
 }
