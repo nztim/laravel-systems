@@ -2,7 +2,7 @@
 
 namespace NZTim\Markdown;
 
-use ParsedownExtra;
+use NZTim\Parsedown\ParsedownExtra;
 
 class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
 {
