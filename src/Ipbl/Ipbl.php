@@ -4,7 +4,6 @@ namespace NZTim\Ipbl;
 
 use Illuminate\Http\Request;
 use NZTim\Geolocate\Geolocate;
-use NZTim\Ipbl\Entry\Entry;
 use NZTim\Ipbl\Entry\Persistence\EntryRepo;
 
 class Ipbl
@@ -21,11 +20,8 @@ class Ipbl
     public function add(string $ip, int $severity, string $reason): void
     {
         $entry = $this->entryRepo->findByIp($ip);
-        if (!$entry) {
-            $entry = new Entry($ip, $this->geolocate->fromIp($ip));
-        }
-        $entry->points += $severity;
-        $this->entryRepo->persist($entry);
+        $country = $this->geolocate->fromIp($ip);
+        $this->entryRepo->add($ip, $country, $severity);
         log_info('ipbl', "{$ip} | {$entry->country} | {$severity} | {$reason} ");
     }
 
