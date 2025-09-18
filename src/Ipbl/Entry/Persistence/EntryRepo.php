@@ -35,14 +35,12 @@ class EntryRepo
 
     public function add(string $ip, string $country, int $severity): void
     {
-        $this->db->transaction(function () use ($ip, $country, $severity) {
-            $entry = $this->findByIp($ip);
-            if (!$entry) {
-                $entry = new Entry($ip, $country);
-            }
-            $entry->points += $severity;
-            $this->persist($entry);
-        });
+        $entry = $this->findByIp($ip);
+        if (!$entry) {
+            $entry = new Entry($ip, $country);
+        }
+        $entry->points += $severity;
+        $this->persist($entry);
     }
 
     /** @return Entry[]|Collection */
