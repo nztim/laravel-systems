@@ -13,11 +13,15 @@ class AddMigrationsCommand extends Command
 
     public function handle()
     {
-        // entries table
+        $connection = config('database.ipbl');
+        if (!$connection) {
+            $this->error("Set config('database.ipbl') with name of SQLite database connection");
+        }
         /** @var MigrationCreator $migrationCreator */
         $migrationCreator = app('migration.creator');
         $filename = $migrationCreator->create('create_ipbl_entries_table', database_path('migrations'));
-        $stub = __DIR__ . '/add_entries_table.stub';
-        file_put_contents($filename, file_get_contents($stub));
+        $content = file_get_contents(__DIR__ . '/add_entries_table.stub');
+        $content = str_replace('%%CONNECTION%%', $connection, $content);
+        file_put_contents($filename, $content);
     }
 }

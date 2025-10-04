@@ -5,16 +5,17 @@ use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration {
 
+    protected $connection = '%%CONNECTION%%';
+
     public function up()
     {
         schema()->create('ipbl', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->string('ip')->unique();
+            $table->string('ip')->index();
             $table->string('country');
             $table->integer('points');
             $table->dateTime('created');
-            $table->dateTime('updated');
         });
     }
 

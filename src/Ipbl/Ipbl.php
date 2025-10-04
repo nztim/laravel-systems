@@ -3,27 +3,31 @@
 namespace NZTim\Ipbl;
 
 use Illuminate\Http\Request;
-use NZTim\CommandBus\CommandBus;
+use NZTim\Geolocate\Geolocate;
 
 class Ipbl
 {
-    private CommandBus $bus;
+    private EntryRepo $entryRepo;
+    private Geolocate $geo;
 
-    public function __construct(CommandBus $bus)
+    public function __construct(EntryRepo $entryRepo, Geolocate $geo)
     {
-        $this->bus = $bus;
+        $this->entryRepo = $entryRepo;
+        $this->geo = $geo;
     }
 
     public function add(string $ip, int $severity, string $reason): void
     {
-        $this->bus->handle(new AddEntry($ip, $severity, $reason));
+        $country = $this->geo->fromIp($ip);
+        $this->entryRepo->add($ip, $country, $severity);
+        log_info('ipbl', "{$ip} | {$country} | {$severity} | {$reason} ");
     }
 
     public function evaluate404(Request $request, int $severity = 5): void
     {
         $path = $request->path();
         if ($this->badPath($path)) {
-            $this->bus->handle(new AddEntry($request->ip(), $severity, "Bad 404: {$path}"));
+            $this->add($request->ip(), $severity, "Bad 404: {$path}");
         }
     }
 

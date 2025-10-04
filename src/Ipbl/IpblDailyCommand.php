@@ -3,7 +3,6 @@
 namespace NZTim\Ipbl;
 
 use Illuminate\Console\Command;
-use NZTim\Ipbl\Entry\Persistence\EntryRepo;
 
 class IpblDailyCommand extends Command
 {
@@ -15,8 +14,8 @@ class IpblDailyCommand extends Command
     {
         $this->entryRepo()->expireOld();
         $output = '';
-        foreach ($this->entryRepo()->toBlock() as $entry) {
-            $output .= "Require not ip {$entry->ip}\n";
+        foreach ($this->entryRepo()->blocklist() as $ip) {
+            $output .= "Require not ip {$ip}\n";
         }
         file_put_contents(storage_path('app/ipbl.conf'), $output);
     }

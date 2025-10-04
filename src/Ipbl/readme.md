@@ -4,6 +4,7 @@ Stores information related to bad requests in the database and uploads to centra
 
 ### Installation
 
+* Set name of database connection as config value `database.ipbl`. Typically SQLite. 
 * Register `IpblServiceProvider::class`
 * Run `ipbl:migration` to add ipbl table.
 * Add daily scheduler entries for `IpblDailyCommand::class` - expires old entries and writes updated list to disk.
