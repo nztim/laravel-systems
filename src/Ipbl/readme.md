@@ -17,3 +17,4 @@ Stores information related to bad requests in the database and uploads to centra
 * Use `Ipbl::add()` in places that handle bad form requests, e.g. triggering honeypot, Turnstile, etc.
 * Choose a severity depending on the request, an IP reaching 100 points is blocked.
 * Ipbl script gathers list, produces and installs apache blocklist.conf.
+* View full list with `ipbl:show` command
