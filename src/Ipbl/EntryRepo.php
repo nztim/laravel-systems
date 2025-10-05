@@ -49,4 +49,22 @@ class EntryRepo
         }
         return $blocklist;
     }
+
+    /** @return ['ip' => total_points] */
+    public function list(): array
+    {
+        $results = $this->db->table($this->table)
+            ->where('country', '!=', 'NZ')
+            ->groupBy('ip')
+            ->select($this->db->raw('ip, SUM(points) as points'))
+            ->get();
+        $data = [];
+        foreach ($results as $result) {
+            if (!array_key_exists($result->ip, $data)) {
+                $data[$result->ip] = 0;
+            }
+            $data[$result->ip] += $result->points;
+        }
+        return $data;
+    }
 }
