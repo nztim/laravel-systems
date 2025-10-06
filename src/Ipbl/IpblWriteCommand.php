@@ -4,9 +4,9 @@ namespace NZTim\Ipbl;
 
 use Illuminate\Console\Command;
 
-class IpblDailyCommand extends Command
+class IpblWriteCommand extends Command
 {
-    protected $signature = 'ipbl:daily';
+    protected $signature = 'ipbl:write';
 
     protected $description = 'Expire old IPBL entries and write updated list to disk';
 

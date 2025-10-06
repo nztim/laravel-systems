@@ -10,7 +10,7 @@ class IpblServiceProvider extends ServiceProvider
     {
         $this->commands([
             AddMigrationsCommand::class,
-            IpblDailyCommand::class,
+            IpblWriteCommand::class,
             ShowCommand::class,
         ]);
     }
