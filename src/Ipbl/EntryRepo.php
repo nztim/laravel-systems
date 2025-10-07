@@ -26,7 +26,7 @@ class EntryRepo
         ]);
     }
 
-    public function expireOld(int $days = 100): void
+    public function expireOld(int $days = 30): void
     {
         $this->db->table($this->table)
             ->where('created', '<', now()->subDays($days))
