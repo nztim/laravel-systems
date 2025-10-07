@@ -4,11 +4,11 @@ Stores information related to bad requests in the database and uploads to centra
 
 ### Installation
 
-* Set name of database connection as config value `database.ipbl`. Typically SQLite. 
 * Register `IpblServiceProvider::class`
+* Configure name of database connection as `database.ipbl`. Typically SQLite.
 * Run `ipbl:migration` to add ipbl table.
-* Add daily scheduler entries for `IpblDailyCommand::class` - expires old entries and writes updated list to disk.
-* Default storage location is `storage_path('app/ipbl.json')`.
+* Configure IPBL submission with `services.ipbl.url` and `services.ipbl.key`.
+* Add daily scheduler entry for `IpblUploadCommand::class` - expires old entries and uploads list to server.
 
 ### Usage
 
@@ -16,5 +16,6 @@ Stores information related to bad requests in the database and uploads to centra
 * Add `Ipbl::evaluate404()` to your 404 handler, add IPs that scan for .env files.
 * Use `Ipbl::add()` in places that handle bad form requests, e.g. triggering honeypot, Turnstile, etc.
 * Choose a severity depending on the request, an IP reaching 100 points is blocked.
-* Ipbl script gathers list, produces and installs apache blocklist.conf.
-* View full list with `ipbl:show` command
+* View full list with `ipbl:show` command.
+* Application blocklist is uploaded to central server.
+* Cron script installs combined blocklist as `/etc/apache/ipbl.conf`.
