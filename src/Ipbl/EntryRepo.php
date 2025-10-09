@@ -65,6 +65,7 @@ class EntryRepo
             }
             $data[$result->ip] += $result->points;
         }
+        asort($data);
         return $data;
     }
 }
