@@ -76,7 +76,7 @@ php artisan migrate
 
 # services.php 
 'geolocate_domain' => 'geo.xyz.com',
- 'mjml'          => [
+'mjml'             => [
     'url'    => env('MJML_URL', 'https://api.mjml.io/v1/render'),
     'app_id' => env('MJML_APP_ID', ''),
     'secret' => env('MJML_SECRET', ''),

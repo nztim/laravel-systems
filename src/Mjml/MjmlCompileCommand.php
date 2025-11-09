@@ -8,7 +8,7 @@ use NZTim\SimpleHttp\Http;
 class MjmlCompileCommand extends Command
 {
     protected $signature = 'mjml:compile {file}';
-    
+
     protected $description = 'Compile MJML file into HTML';
 
     public function handle(): int
