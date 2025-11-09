@@ -38,6 +38,7 @@ NZTim\Ipbl\IpblServiceProvider::class,
 NZTim\Logger\LoggerServiceProvider::class,
 NZTim\Mailer\MailerServiceProvider::class,
 NZTim\Markdown\MarkdownServiceProvider::class,
+NZTim\Mjml\MjmlServiceProvider::class,
 NZTim\ORM\Laravel\OrmServiceProvider::class,
 NZTim\Queue\QueueServiceProvider::class,
 NZTim\SES\SesServiceProvider::class,
@@ -75,7 +76,11 @@ php artisan migrate
 
 # services.php 
 'geolocate_domain' => 'geo.xyz.com',
- 
+ 'mjml'          => [
+    'url'    => env('MJML_URL', 'https://api.mjml.io/v1/render'),
+    'app_id' => env('MJML_APP_ID', ''),
+    'secret' => env('MJML_SECRET', ''),
+],
 ```
 
 ##### .env values
@@ -90,6 +95,11 @@ S3_BUCKET=
 # LOGGER
 LOGGER_EMAIL_SENDER=app@example.org
 LOGGER_EMAIL_RECIPIENT=dev@example.org
+
+# MJML API
+MJML_URL=https://api.mjml.io/v1/render
+MJML_APP_ID=
+MJML_SECRET=
 ```
 
 ##### Scheduler entries
@@ -110,6 +120,7 @@ $schedule->command(IpblDailyCommand::class)     ->dailyAt('4:05');
 - [nztim/logger2](/src/Logger/readme.md)
 - [nztim/mailer2](/src/Mailer/readme.md)
 - [nztim/markdown](/src/Markdown/readme.md)
+- [nztim/mjml](/src/Mjml/readme.md)
 - [nztim/orm](/src/Orm/readme.md)
 - [nztim/queue](/src/Queue/readme.md)
 - [nztim/ses](/src/SES/readme.md)
@@ -118,6 +129,9 @@ $schedule->command(IpblDailyCommand::class)     ->dailyAt('4:05');
 
 ##### Upgrading
 
+* **7.0:** Requires PHP 8.4 and Laravel 12.
+* **6.0:** Remove defunct glide-symfony package.
+* **5.0:** Removed defunct LaravelCollective Html package.
 * **4.0:** Transitional - L10 compatible with updates for L11. Changed Glide ResponseFactory to Symfony.
 * **3.0:** Laravel 10, add SNS, SES, SimpleHttp packages and geolocate helper. SES major revision, requires refactoring.
 * **2.9:** Remove MailLog package.
