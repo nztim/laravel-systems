@@ -7,7 +7,7 @@ Stores information related to bad requests in the database and uploads to centra
 * Register `IpblServiceProvider::class`
 * Configure name of database connection as `database.ipbl`. Typically SQLite.
 * Run `ipbl:migration` to add ipbl table.
-* Configure IPBL submission with `services.ipbl.url` and `services.ipbl.key`.
+* Configure IPBL submission with `services.ipbl.url` (default `https://system2.nztim.com/api/ipbl/submit`) and `services.ipbl.key`.
 * Add daily scheduler entry for `IpblUploadCommand::class` - expires old entries and uploads list to server.
 
 ### Usage

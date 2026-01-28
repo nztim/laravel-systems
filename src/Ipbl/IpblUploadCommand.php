@@ -4,6 +4,7 @@ namespace NZTim\Ipbl;
 
 use Illuminate\Console\Command;
 use NZTim\SimpleHttp\Http;
+use RuntimeException;
 
 class IpblUploadCommand extends Command
 {
@@ -15,9 +16,12 @@ class IpblUploadCommand extends Command
     {
         $this->entryRepo()->expireOld();
         $blocklist = $this->entryRepo()->blocklist();
-        (new Http())
+        $response = (new Http())
             ->withHeaders(['X-API-KEY' => config('services.ipbl.key')])
             ->post(config('services.ipbl.url'), ['list' => $blocklist]);
+        if (!$response->isOk()) {
+            throw new RuntimeException('IPBL upload failed, status: ' . $response->status());
+        }
     }
 
     private function entryRepo(): EntryRepo
