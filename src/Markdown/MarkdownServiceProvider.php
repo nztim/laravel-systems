@@ -9,7 +9,7 @@ class MarkdownServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('nztim-markdown-converter', function () {
+        $this->app->singleton(MarkdownConverter::class, function () {
             return (new ParsedownExtraWithYouTubeEmbed())
                 ->setBreaksEnabled(true)
                 ->setSafeMode(true)

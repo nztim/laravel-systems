@@ -4,13 +4,18 @@ namespace NZTim\Markdown;
 
 use NZTim\Parsedown\ParsedownExtra;
 
-class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra
+class ParsedownExtraWithYouTubeEmbed extends ParsedownExtra implements MarkdownConverter
 {
     private bool $jotformEnabled = true;
 
     public function setJotformEnabled(bool $enabled)
     {
         $this->jotformEnabled = $enabled;
+    }
+
+    public function convert($markdown): string
+    {
+        return $this->text($markdown);
     }
 
     protected function inlineLink($Excerpt)

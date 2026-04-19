@@ -267,6 +267,7 @@ class Ipbl
             'xmlrpc.php',
             'xo.php',
             'xx.php',
+            'db.sql',
         ];
         return in_array($path, $paths);
     }

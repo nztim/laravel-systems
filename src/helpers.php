@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use NZTim\Logger\Logger;
-use NZTim\Markdown\ParsedownExtraWithYouTubeEmbed;
+use NZTim\Markdown\MarkdownConverter;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 
@@ -32,9 +32,9 @@ if (!function_exists('log_error')) {
 
 function markdown(string $content): string
 {
-    /** @var ParsedownExtraWithYouTubeEmbed $converter */
-    $converter = app('nztim-markdown-converter');
-    return $converter->text($content);
+    /** @var MarkdownConverter $converter */
+    $converter = app(MarkdownConverter::class);
+    return $converter->convert($content);
 }
 
 // SYMFONY MAILER FACTORY -----------------------------------------------------
