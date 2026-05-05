@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use NZTim\Html\FormBuilder;
 use Illuminate\Database\Schema\Builder;
 
@@ -139,4 +140,9 @@ function faker(int|null $seed = null): \Faker\Generator
         $faker->seed($seed);
     }
     return $faker;
+}
+
+function carbon(): Carbon
+{
+    return Carbon::now();
 }
