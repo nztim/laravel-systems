@@ -34,7 +34,7 @@ class QueuedJobRepo
     public function recent(int $days): Collection
     {
         $rows = $this->db->table($this->table)
-            ->where('created', '>', now()->subDays($days))
+            ->where('created', '>', carbon()->subDays($days))
             ->orderBy('id', 'asc')
             ->get();
         return $this->hydrate($rows);
@@ -44,7 +44,7 @@ class QueuedJobRepo
     {
         $rows = $this->db->table($this->table)
             ->whereNotNull('completed')
-            ->where('created', '>', now()->subHours($hours))
+            ->where('created', '>', carbon()->subHours($hours))
             ->get();
         return $this->hydrate($rows);
     }
@@ -83,7 +83,7 @@ class QueuedJobRepo
     public function purgeCompleted(): void
     {
         $this->db->table($this->table)
-            ->where('completed', '<', now()->subMonth())
+            ->where('completed', '<', carbon()->subMonth())
             ->delete();
     }
 
@@ -92,7 +92,7 @@ class QueuedJobRepo
         $this->db->table($this->table)
             ->where('attempts', 0)
             ->whereNull('completed')
-            ->update(['completed' => now()]);
+            ->update(['completed' => carbon()]);
     }
 
     public function delete(int $id): void

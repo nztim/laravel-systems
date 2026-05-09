@@ -25,8 +25,8 @@ class QueuedJob
         $job->id = null;
         $job->command = base64_encode(serialize($command));
         $job->attempts = $attempts;
-        $job->created = now();
-        $job->updated = now();
+        $job->created = carbon();
+        $job->updated = carbon();
         $job->completed = null;
         return $job;
     }
@@ -112,12 +112,12 @@ class QueuedJob
 
     public function touch(): void
     {
-        $this->updated = now();
+        $this->updated = carbon();
     }
 
     public function setComplete(): void
     {
-        $this->completed = now();
+        $this->completed = carbon();
     }
 
     public function retry(): void

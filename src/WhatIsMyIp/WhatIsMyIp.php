@@ -15,7 +15,7 @@ class WhatIsMyIp
 
     public function get(): string
     {
-        return $this->cache->remember('whatismyip', now()->addDay(), function () {
+        return $this->cache->remember('whatismyip', carbon()->addDay(), function () {
             return trim(file_get_contents('https://api.ipify.org'));
         });
     }

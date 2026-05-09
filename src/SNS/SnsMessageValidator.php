@@ -25,7 +25,7 @@ class SnsMessageValidator
             return $validateResult;
         }
         // Get the certificate and cache for a while
-        $certificate = $this->cache->remember(md5('snscert-' . $url), now()->addDay(), function () use ($url) {
+        $certificate = $this->cache->remember(md5('snscert-' . $url), carbon()->addDay(), function () use ($url) {
             return $this->http->get($url)->body();
         });
         // Get public key

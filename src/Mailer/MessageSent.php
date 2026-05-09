@@ -20,7 +20,7 @@ class MessageSent
 
     public function __construct(array $data)
     {
-        $this->date = now();
+        $this->date = carbon();
         $this->sender = $data['sender'] ?? '';;
         $this->senderName = $data['senderName'] ?? '';;
         $this->replyTo = $data['replyTo'] ?? '';;

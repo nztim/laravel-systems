@@ -22,14 +22,14 @@ class EntryRepo
             'ip'      => $ip,
             'country' => $country,
             'points'  => $severity,
-            'created' => now(),
+            'created' => carbon(),
         ]);
     }
 
     public function expireOld(int $days = 30): void
     {
         $this->db->table($this->table)
-            ->where('created', '<', now()->subDays($days))
+            ->where('created', '<', carbon()->subDays($days))
             ->delete();
     }
 
