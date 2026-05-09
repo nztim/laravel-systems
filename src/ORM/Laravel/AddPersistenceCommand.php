@@ -3,6 +3,7 @@
 namespace NZTim\ORM\Laravel;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 class AddPersistenceCommand extends Command
@@ -37,7 +38,7 @@ class AddPersistenceCommand extends Command
         $repo = str_replace('%%CLASS%%', $class, $repo);
         $repo = str_replace('%%RNAME%%', $repoName, $repo);
         $repo = str_replace('%%HNAME%%', $hydratorName, $repo);
-        $repo = str_replace('%%TABLENAME%%', str_plural(strtolower($shortClassName)), $repo);
+        $repo = str_replace('%%TABLENAME%%', Str::plural(strtolower($shortClassName)), $repo);
         $repo = str_replace('%%SHORTCLASS%%', $shortClassName, $repo);
         $repoFullPath = $dir . DIRECTORY_SEPARATOR . $repoName . '.php';
         if (!file_exists($repoFullPath)) {

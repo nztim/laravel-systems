@@ -34,16 +34,16 @@ class FormBuilder
     {
         $attributes['method'] = 'get';
         $append = '';
-        if (strtolower(array_get($options, 'method', 'post')) === 'post') {
+        if (strtolower(Arr::get($options, 'method', 'post')) === 'post') {
             $attributes['method'] = 'post';
             $append = csrf_field();
         }
         $attributes['action'] = $this->getAction($options);
         $attributes['accept-charset'] = 'UTF-8';
-        if (array_get($options, 'files', false)) {
+        if (Arr::get($options, 'files', false)) {
             $options['enctype'] = 'multipart/form-data';
         }
-        $attributes = array_merge($attributes, array_except($options, ['method', 'url', 'route', 'action', 'files']));
+        $attributes = array_merge($attributes, Arr::except($options, ['method', 'url', 'route', 'action', 'files']));
         $attributes = $this->attributesToHtml($attributes);
         return $this->toHtmlString('<form' . $attributes . '>' . $append);
     }

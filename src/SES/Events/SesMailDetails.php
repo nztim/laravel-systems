@@ -3,6 +3,7 @@
 namespace NZTim\SES\Events;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class SesMailDetails
 {
@@ -19,49 +20,49 @@ class SesMailDetails
         // In the webhook time is recorded in ISO format: 2016-10-19T23:20:52.240Z
         // 'Z' means Zulu or UTC time, need to move to local
         // Also, it seems that sometimes the date is provided as an array instead of a string, in this case use now() i.e. the time the notification is received
-        $data = array_get($this->data, 'timestamp');
-        return is_string($data) ?  Carbon::parse($data)->setTimezone('Pacific/Auckland') : now();
+        $data = Arr::get($this->data, 'timestamp');
+        return is_string($data) ?  Carbon::parse($data)->setTimezone('Pacific/Auckland') : carbon();
     }
 
     public function messageId(): string
     {
-        return array_get($this->data, 'messageId', '');
+        return Arr::get($this->data, 'messageId', '');
     }
 
     public function envelopeFrom(): string
     {
-        return array_get($this->data, 'source', '');
+        return Arr::get($this->data, 'source', '');
     }
 
     public function headerFrom(): string
     {
-        return array_get($this->data, 'commonHeaders.from.0', '');
+        return Arr::get($this->data, 'commonHeaders.from.0', '');
     }
 
     public function arn(): string
     {
-        return array_get($this->data, 'sourceArn', '');
+        return Arr::get($this->data, 'sourceArn', '');
     }
 
     public function sourceIp(): string
     {
-        return array_get($this->data, 'sourceIp', '');
+        return Arr::get($this->data, 'sourceIp', '');
     }
 
     public function recipient(): string
     {
-        $destinations = array_get($this->data, 'destination', []);
+        $destinations = Arr::get($this->data, 'destination', []);
         return $destinations[0] ?? '';
     }
 
     public function subject(): string
     {
-        return array_get($this->data, 'commonHeaders.subject', '(Unknown)');
+        return Arr::get($this->data, 'commonHeaders.subject', '(Unknown)');
     }
 
     public function headers(): array
     {
-        return array_get($this->data, 'headers', []);
+        return Arr::get($this->data, 'headers', []);
     }
 
     public function header(string $key): string

@@ -2,6 +2,7 @@
 
 namespace NZTim\SES;
 
+use Illuminate\Support\Arr;
 use NZTim\Queue\QueueManager;
 use NZTim\SES\Email\SesConfirmationEmail;
 use NZTim\SES\Email\SesUnsubscribeEmail;
@@ -63,7 +64,7 @@ class SesEventFactory
         if (!is_array($data)) {
             throw new \RuntimeException("Unable to decode json from message: " . $sns->message);
         }
-        $type = array_get($data, 'notificationType', '');
+        $type = Arr::get($data, 'notificationType', '');
         if ($type === 'AmazonSnsSubscriptionSucceeded') {
             log_info('ses', 'AmazonSnsSubscriptionSucceeded message received: ' . json_encode($data));
             return null;
@@ -72,7 +73,7 @@ class SesEventFactory
             'Bounce' => new SesBounce($data),
             'Complaint' => new SesComplaint($data),
             'Delivery' => new SesDelivery($data),
-            default => throw new RuntimeException('Invalid notificationType in SES data: ' . array_get($data, 'notificationType', '')),
+            default => throw new RuntimeException('Invalid notificationType in SES data: ' . Arr::get($data, 'notificationType', '')),
         };
     }
 }

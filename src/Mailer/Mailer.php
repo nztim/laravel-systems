@@ -7,6 +7,8 @@ use Assert\Assertion;
 use Illuminate\Contracts\Mail\Mailer as LaravelMailer;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Mail\Message as LaravelEmail;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Mailer
 {
@@ -83,10 +85,10 @@ class Mailer
         Assertion::nullOrString($message->senderName, 'SenderName invalid');
         Assertion::nullOrEmail($message->replyTo, 'ReplyTo not an email address');
         Assertion::nullOrEmail($message->recipientOverride, 'recipientOverride not an email address');
-        foreach (array_wrap($message->cc) as $address) {
+        foreach (Arr::wrap($message->cc) as $address) {
             Assertion::nullOrEmail($address, "{$address} not an email address");
         }
-        foreach (array_wrap($message->bcc) as $address) {
+        foreach (Arr::wrap($message->bcc) as $address) {
             Assertion::nullOrEmail($address, "{$address} not an email address");
         }
         Assertion::isArray($message->data, 'Data not an array');
@@ -100,7 +102,7 @@ class Mailer
             '*.invalid',
         ];
         foreach ($domains as $domain) {
-            if (str_is($domain, $recipient)) {
+            if (Str::is($domain, $recipient)) {
                 log_warning('laravel', 'Skipped sending email to invalid recipient: ' . $recipient);
                 return false;
             }

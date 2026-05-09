@@ -2,6 +2,8 @@
 
 namespace NZTim\SES\Events;
 
+use Illuminate\Support\Arr;
+
 class SesComplaint implements SesEvent
 {
     public array $data;
@@ -20,7 +22,7 @@ class SesComplaint implements SesEvent
 
     public function complaintType(): string
     {
-        return array_get($this->data, 'complaint.complaintFeedbackType', '');
+        return Arr::get($this->data, 'complaint.complaintFeedbackType', '');
     }
 }
 

@@ -3,6 +3,7 @@
 namespace NZTim\Mailer;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use NZTim\CommandBus\CommandBus;
 
@@ -26,9 +27,9 @@ abstract class TestEmailsCommand extends Command
         $this->info("\nSending test emails to: " . $this->recipient . "\n");
         $this->setTests();
         $selection = $this->menu();
-        if (array_has($this->tests, $selection)) {
+        if (Arr::has($this->tests, $selection)) {
             /** @var AbstractMessage $message */
-            $message = array_get($this->tests, $selection);
+            $message = Arr::get($this->tests, $selection);
             $this->info('Sending: ' . $message->testLabel());
             $message->recipientOverride = $this->recipient;
             $this->passToHandler($message);

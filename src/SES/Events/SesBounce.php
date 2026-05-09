@@ -2,6 +2,7 @@
 
 namespace NZTim\SES\Events;
 
+use Illuminate\Support\Arr;
 use RuntimeException;
 
 class SesBounce implements SesEvent
@@ -22,17 +23,17 @@ class SesBounce implements SesEvent
 
     public function bounceType(): string
     {
-        return array_get($this->data, 'bounce.bounceType', '');
+        return Arr::get($this->data, 'bounce.bounceType', '');
     }
 
     public function bounceSubType(): string
     {
-        return array_get($this->data, 'bounce.bounceSubType', '');
+        return Arr::get($this->data, 'bounce.bounceSubType', '');
     }
 
     public function diagnosticCode(): string
     {
-        return array_get($this->data, 'bounce.bouncedRecipients.0.diagnosticCode', '');
+        return Arr::get($this->data, 'bounce.bouncedRecipients.0.diagnosticCode', '');
     }
 
     // Interpretation ---------------------------------------------------------

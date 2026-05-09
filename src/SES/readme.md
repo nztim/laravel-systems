@@ -13,7 +13,7 @@ Handles SES webhooks sent via SNS.
 * Follow configuration for nztim/sns, including setting up a route to receive webhooks. 
   * Connect it to `NZTim\SNS\Examples\WebhookController` or your own version.
 * `SesServiceProvider` configures event listeners to handle SNS messages.
-* Add the topic ARNs you wish the SES package to listen to, '*' is a wildcard (str_is() used for comparison).
+* Add the topic ARNs you wish the SES package to listen to, '*' is a wildcard (Str::is() used for comparison).
 * SNS subscription/unsub events are logged and if `ses.sns_subs_recipient` contains a valid email address, are sent to that address as well.
 
 ### Usage

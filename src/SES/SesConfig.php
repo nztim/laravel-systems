@@ -3,6 +3,7 @@
 namespace NZTim\SES;
 
 use Illuminate\Config\Repository;
+use Illuminate\Support\Str;
 
 class SesConfig
 {
@@ -22,7 +23,7 @@ class SesConfig
     public function filterArn(string $arn): bool
     {
         foreach (config('ses.arns') as $pattern) {
-            if (str_is($pattern, $arn)) {
+            if (Str::is($pattern, $arn)) {
                 return true;
             }
         }
