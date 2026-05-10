@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use NZTim\Html\FormBuilder;
 use Illuminate\Database\Schema\Builder;
 
@@ -142,7 +144,29 @@ function faker(int|null $seed = null): \Faker\Generator
     return $faker;
 }
 
+// Helpers replacements
+
 function carbon(): Carbon
 {
     return Carbon::now();
+}
+
+function str_random(int $length = 16): string
+{
+    return Str::random($length);
+}
+
+function str_slug($title): string
+{
+    return Str::slug($title);
+}
+
+function str_limit($value, $limit = 100, $end = '...'): string
+{
+    return Str::limit($value, $limit, $end);
+}
+
+function str_is($pattern, $value): bool
+{
+    return Str::is($pattern, $value);
 }
