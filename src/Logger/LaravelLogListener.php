@@ -13,8 +13,12 @@ class LaravelLogListener
         $this->logger = $logger;
     }
 
-    public function handle(MessageLogged $messageLogged)
+    public function handle(MessageLogged $messageLogged): void
     {
+        // Ignore unavoidable and useless message.
+        if (str_contains($messageLogged->message, 'Directly setting property "headers" of "Illuminate\Http\Response" is deprecated; pass the header bag as a constructor argument instead.')) {
+            return;
+        }
         $this->logger->add('laravel', $this->logger->translateLevel($messageLogged->level), $messageLogged->message, $messageLogged->context);
     }
 }
