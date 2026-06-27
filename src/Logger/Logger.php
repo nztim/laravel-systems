@@ -40,42 +40,42 @@ class Logger
         $this->cache = $cache;
     }
 
-    public function info(string $channel, string $message, array $context = [])
+    public function info(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::INFO, $message, $context);
     }
 
-    public function notice(string $channel, string $message, array $context = [])
+    public function notice(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::NOTICE, $message, $context);
     }
 
-    public function warning(string $channel, string $message, array $context = [])
+    public function warning(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::WARNING, $message, $context);
     }
 
-    public function error(string $channel, string $message, array $context = [])
+    public function error(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::ERROR, $message, $context);
     }
 
-    public function critical(string $channel, string $message, array $context = [])
+    public function critical(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::CRITICAL, $message, $context);
     }
 
-    public function alert(string $channel, string $message, array $context = [])
+    public function alert(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::ALERT, $message, $context);
     }
 
-    public function emergency(string $channel, string $message, array $context = [])
+    public function emergency(string $channel, string $message, array $context = []): void
     {
         $this->add($channel, Logger::EMERGENCY, $message, $context);
     }
 
-    public function add(string $channel, int $level, string $message, array $context = [])
+    public function add(string $channel, int $level, string $message, array $context = []): void
     {
         $channel = $this->cleanChannelName($channel);
         $logger = new MonologLogger($channel);

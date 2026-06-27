@@ -28,6 +28,7 @@ class %%RNAME%%
         return $row ? $this->hydrate($row) : null;
     }
 
+    /** @return Collection<%%SHORTCLASS%%> */
     public function findByIdMultiple(array $ids): Collection
     {
         $rows = $this->db->table($this->table)->whereIn('id', $ids)->get();
@@ -66,7 +67,6 @@ class %%RNAME%%
         return $this->hydrator->hydrate((array)$data);
     }
 
-    /** @return %%SHORTCLASS%%[]|Collection */
     private function hydrateCollection(Collection $collection): Collection
     {
         return $collection->map(function (stdClass $data) {
@@ -74,7 +74,6 @@ class %%RNAME%%
         });
     }
 
-    /** @return LengthAwarePaginator|%%SHORTCLASS%%[] */
     private function hydrateLengthAwarePaginator(LengthAwarePaginator $paginator): LengthAwarePaginator
     {
         return $paginator->setCollection($this->hydrateCollection($paginator->getCollection()));
