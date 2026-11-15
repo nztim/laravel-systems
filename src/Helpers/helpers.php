@@ -72,6 +72,16 @@ function cached_asset(string $asset): string
     return cdn($path);
 }
 
+function asset_version(string $asset): string
+{
+    $realPath = public_path($asset);
+    if (!file_exists($realPath)) {
+        throw new InvalidArgumentException('File not found at ' . $realPath);
+    }
+    $asset = config('app.asset-version') ? "{$asset}?" . http_build_query(['v' => config('app.asset-version')]) : $asset;
+    return asset($asset);
+}
+
 // Based on https://www.keycdn.com/support/laravel-cdn-integration/
 function cdn(string $asset): string
 {
