@@ -11,6 +11,7 @@
     * Note: .htaccess rule is required, see below
 * `form()` - replacement for `Form::` facade 
 * `schema()` - replacement for `Schema::` facade
+* `asset-version:update` artisan command - updates ASSET_VERSION .env variable with new random value
 
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
