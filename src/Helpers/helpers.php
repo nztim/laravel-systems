@@ -51,27 +51,6 @@ function countrySelect(): array
     return include(__DIR__ . DIRECTORY_SEPARATOR . 'countries.php');
 }
 
-/* https://github.com/h5bp/server-configs-apache/blob/master/src/web_performance/filename-based_cache_busting.conf
- * Requires htaccess rule:
- * <IfModule mod_rewrite.c>
- *     RewriteEngine On
- *     RewriteCond %{REQUEST_FILENAME} !-f
- *     RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
- * </IfModule>
- */
-function cached_asset(string $asset): string
-{
-    $realPath = public_path($asset);
-    if (!file_exists($realPath)) {
-        throw new InvalidArgumentException('File not found at ' . $realPath);
-    }
-    $hash = sprintf("%u", crc32(md5_file($realPath)));
-    $extension = pathinfo($realPath, PATHINFO_EXTENSION);
-    $stripped = substr($asset, 0, -(strlen($extension) + 1));
-    $path = implode('.', [$stripped, $hash, $extension]);
-    return cdn($path);
-}
-
 function asset_version(string $asset): string
 {
     $realPath = public_path($asset);
@@ -80,20 +59,6 @@ function asset_version(string $asset): string
     }
     $asset = config('app.asset-version') ? "{$asset}?" . http_build_query(['v' => config('app.asset-version')]) : $asset;
     return asset($asset);
-}
-
-// Based on https://www.keycdn.com/support/laravel-cdn-integration/
-function cdn(string $asset): string
-{
-    $cdnDomain = config('services.cdn.domain');
-    if (app()->environment() != 'production' || !$cdnDomain) {
-        return asset($asset);
-    }
-    // Remove query string
-    $asset = explode("?", $asset);
-    $asset = $asset[0];
-    // "//<cdnDomain>/path/to/asset.jpg"
-    return "//" . rtrim($cdnDomain, "/") . "/" . ltrim($asset, "/");
 }
 
 function route_force_host($name, $parameters = [])

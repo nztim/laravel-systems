@@ -7,12 +7,10 @@
 * `flash($message, $type = 'danger')` - send flash messages to the view
 * `markdown(string $content)` - renders Markdown GFM style including line breaks
 * `sanitize(mixed $data)` - runs htmlspecialchars() and trim() on a string or an array of strings
-* `cached_asset($path)` - returns asset path with hashed integer value, e.g. `main.css` -> `main.847389233.css`
-    * Note: .htaccess rule is required, see below
 * `form()` - replacement for `Form::` facade 
 * `schema()` - replacement for `Schema::` facade
 * `asset-version:update` artisan command - updates ASSET_VERSION .env variable with new random value
-* `asset_version()` - outputs asset URL with deploy hash version for cache busting. Replaces `cached_asset()`.
+* `asset_version()` - outputs asset URL with deploy hash version for cache busting.
 
 ### Blade directives
 * `@autolink($string)` - sanitizes the string, autolinks and runs nl2br
@@ -26,16 +24,6 @@
 * `fileext:jpg,jpeg,png,gif` - validates file extension
 * `after_or_equal:2019-11-01` - date is after or equal date provided, uses strtotime for comparison
 * `utf8` - validates UTF-8 string
-
-### .htaccess for `cached_asset()`
-Add this before the Laravel rewrite rule
-```
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.+)\.(\d+)\.(bmp|css|cur|gif|ico|jpe?g|js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
-</IfModule>
-```
 
 ### Envcheck command
 Add `php artisan envcheck` to your deploy process to enable a comparison check between `.env` and `.env.example`

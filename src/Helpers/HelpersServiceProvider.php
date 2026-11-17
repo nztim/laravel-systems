@@ -81,7 +81,6 @@ class HelpersServiceProvider extends ServiceProvider
 
         $this->commands([
             AssetVersionUpdateCommand::class,
-            DevHelperCommand::class,
             EnvCheckCommand::class,
             ServerCheckCommand::class,
         ]);
